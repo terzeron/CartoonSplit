@@ -1,0 +1,14 @@
+band_width= 100
+num_units= 2
+margin= 0
+arg= vertical.jpg
+width=760, height=21472
+bgcolor= (255, 255, 255)
+orientation= vertical
+(x0, y0)= (0, 0)
+(x1, y1)= (0, 10636)
+cutting point= (0, 11234)
+
+(x0, y0)= (0, 11234)
+(x1, y1)= (0, 21372)
+last cutting point= (760, 21472)

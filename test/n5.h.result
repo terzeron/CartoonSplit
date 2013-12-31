@@ -1,0 +1,26 @@
+band_width= 100
+num_units= 5
+margin= 0
+arg= horizontal.jpg
+width=21472, height=760
+bgcolor= (255, 255, 255)
+orientation= horizontal
+(x0, y0)= (0, 0)
+(x1, y1)= (4194, 0)
+cutting point= (5154, 0)
+
+(x0, y0)= (5154, 0)
+(x1, y1)= (8488, 0)
+cutting point= (10006, 0)
+
+(x0, y0)= (10006, 0)
+(x1, y1)= (12783, 0)
+cutting point= (13660, 0)
+
+(x0, y0)= (13660, 0)
+(x1, y1)= (17077, 0)
+cutting point= (17608, 0)
+
+(x0, y0)= (17608, 0)
+(x1, y1)= (21372, 0)
+last cutting point= (21472, 760)
