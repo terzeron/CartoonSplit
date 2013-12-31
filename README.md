@@ -22,7 +22,7 @@ Usage
 
 Tutorial
 --------
-split.py -n 5 -b 20 imagefile
+ > $ split.py -n 5 -b 20 imagefile
 
 There will be 5 sub images at maximum after splitting the original image file.  
 The '-n' option specifies the maximum number of splitted sub images.  
