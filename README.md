@@ -30,5 +30,8 @@ The '-b' option specifies the width of split band.
 The '-m' option specifies the marginal size which can be ignored.  
 The '-r' option is obsoleted for the PIL library functionality.  
   
+ > $ merge.py newimagefile subimagefile1 subimagefile2 ...
+
+You can merge some image files to a new big file.
 
 
