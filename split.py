@@ -106,17 +106,18 @@ def find_bgcolor_band(im, bgcolor, orientation, band_width, x1, y1, margin):
 
 
 def print_usage():
-	print "Usage: %s -n #unit [-b bandwidth] [-m margin] [-r] imagefile" % (sys.argv[0])
+	print "Usage: %s -n #unit [-b bandwidth] [-m margin] [-c bgcolor] [-r] imagefile" % (sys.argv[0])
 	print "\t-n #unit: more than 2"
 	print "\t-b bandwidth: default 100"
 	print "\t-m margin: default 10"
+	print "\t-c bgcolor: white or black"
 	print "\t-r: remove bouding box"
 	
 			
 def main():
 	# 옵션 처리
 	try:
-		opts, args = getopt.getopt(sys.argv[1:], "hb:n:m:r")
+		opts, args = getopt.getopt(sys.argv[1:], "hb:n:m:c:r")
 	except getopt.GetoptError as err:
 		print_usage()
 		print "Invaild option definition"
@@ -124,6 +125,7 @@ def main():
 	band_width = default_band_width
 	num_units = default_num_units
 	margin = default_margin
+	bgcolor = None
 	do_remove_bounding_box = False
 	for o, a in opts:
 		if o == "-b":
@@ -138,6 +140,11 @@ def main():
 				sys.exit(-1)
 		elif o == "-r":
 			do_remove_bounding_box = True
+		elif o == "-c":
+			if a == "white":
+				bgcolor = (255, 255, 255)
+			elif a == "black":
+				bgcolor = (0, 0, 0)
 		else:
 			print_usage()
 			print "Unknown option"
@@ -158,7 +165,8 @@ def main():
 	(width, height) = im.size
 	print "width=%d, height=%d" % (width, height)
 	# 배경색을 결정함
-	bgcolor = determine_bgcolor(im, 10)
+	if bgcolor == None:
+		bgcolor = determine_bgcolor(im, 10)
 	print "bgcolor=", bgcolor
 		
 	(x0, y0) = (0, 0)
