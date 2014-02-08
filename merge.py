@@ -19,7 +19,8 @@ def main():
 		im.append(Image.open(sys.argv[i + 2]))
 		(width, height) = im[i].size
 		print width, height
-		total_width = width
+		if total_width < width:
+			total_width = width
 		total_height += height
 
 	print total_width, total_height
