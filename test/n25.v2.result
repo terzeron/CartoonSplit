@@ -1,0 +1,14 @@
+band_width= 10
+num_units= 25
+margin= 0
+arg= vertical2.jpg
+width=650, height=25700
+orientation= vertical
+unit_width= 1018
+bgcolor= (0, 0, 0)
+i=0, num_units=25
+(x0, y0)= (0, 0)
+(x1, y1)= (0, 1028)
+cutting point= (-1, -1)
+Error: no splitting
+last cutting point= (650, 25700)
