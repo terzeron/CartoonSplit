@@ -3,12 +3,16 @@ num_units= 2
 margin= 0
 arg= horizontal.jpg
 width=21472, height=760
-bgcolor= (255, 255, 255)
 orientation= horizontal
+unit_width= 10686
+bgcolor= (255, 255, 255)
+i=0, num_units=2
 (x0, y0)= (0, 0)
-(x1, y1)= (10636, 0)
+(x1, y1)= (10786, 0)
 cutting point= (11410, 0)
+crop: x0=0, y0=0, x1=11410, height=760
 
+i=1, num_units=2
 (x0, y0)= (11410, 0)
-(x1, y1)= (21372, 0)
+(x1, y1)= (22096, 0)
 last cutting point= (21472, 760)

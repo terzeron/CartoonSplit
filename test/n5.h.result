@@ -3,24 +3,34 @@ num_units= 5
 margin= 0
 arg= horizontal.jpg
 width=21472, height=760
-bgcolor= (255, 255, 255)
 orientation= horizontal
+unit_width= 4214
+bgcolor= (255, 255, 255)
+i=0, num_units=5
 (x0, y0)= (0, 0)
-(x1, y1)= (4194, 0)
+(x1, y1)= (4314, 0)
 cutting point= (5154, 0)
+crop: x0=0, y0=0, x1=5154, height=760
 
+i=1, num_units=5
 (x0, y0)= (5154, 0)
-(x1, y1)= (8488, 0)
+(x1, y1)= (9368, 0)
 cutting point= (10006, 0)
+crop: x0=5154, y0=0, x1=10006, height=760
 
+i=2, num_units=5
 (x0, y0)= (10006, 0)
-(x1, y1)= (12783, 0)
-cutting point= (13660, 0)
+(x1, y1)= (14220, 0)
+cutting point= (15498, 0)
+crop: x0=10006, y0=0, x1=15498, height=760
 
-(x0, y0)= (13660, 0)
-(x1, y1)= (17077, 0)
-cutting point= (17608, 0)
+i=3, num_units=5
+(x0, y0)= (15498, 0)
+(x1, y1)= (19712, 0)
+cutting point= (20109, 0)
+crop: x0=15498, y0=0, x1=20109, height=760
 
-(x0, y0)= (17608, 0)
-(x1, y1)= (21372, 0)
+i=4, num_units=5
+(x0, y0)= (20109, 0)
+(x1, y1)= (24323, 0)
 last cutting point= (21472, 760)

@@ -3,24 +3,34 @@ num_units= 5
 margin= 0
 arg= vertical.jpg
 width=760, height=21472
-bgcolor= (255, 255, 255)
 orientation= vertical
+unit_width= 4214
+bgcolor= (255, 255, 255)
+i=0, num_units=5
 (x0, y0)= (0, 0)
-(x1, y1)= (0, 4194)
+(x1, y1)= (0, 4314)
 cutting point= (0, 4611)
+crop: x0=0, y0=0, width=760, y1=4611
 
+i=1, num_units=5
 (x0, y0)= (0, 4611)
-(x1, y1)= (0, 8488)
+(x1, y1)= (0, 8825)
 cutting point= (0, 8938)
+crop: x0=0, y0=4611, width=760, y1=8938
 
+i=2, num_units=5
 (x0, y0)= (0, 8938)
-(x1, y1)= (0, 12783)
+(x1, y1)= (0, 13152)
 cutting point= (0, 13382)
+crop: x0=0, y0=8938, width=760, y1=13382
 
+i=3, num_units=5
 (x0, y0)= (0, 13382)
-(x1, y1)= (0, 17077)
+(x1, y1)= (0, 17596)
 cutting point= (0, 18058)
+crop: x0=0, y0=13382, width=760, y1=18058
 
+i=4, num_units=5
 (x0, y0)= (0, 18058)
-(x1, y1)= (0, 21372)
+(x1, y1)= (0, 22272)
 last cutting point= (760, 21472)

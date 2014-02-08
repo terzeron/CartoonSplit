@@ -3,16 +3,22 @@ num_units= 3
 margin= 0
 arg= vertical.jpg
 width=760, height=21472
-bgcolor= (255, 255, 255)
 orientation= vertical
+unit_width= 7090
+bgcolor= (255, 255, 255)
+i=0, num_units=3
 (x0, y0)= (0, 0)
-(x1, y1)= (0, 7057)
-cutting point= (0, 7237)
+(x1, y1)= (0, 7190)
+cutting point= (0, 7240)
+crop: x0=0, y0=0, width=760, y1=7240
 
-(x0, y0)= (0, 7237)
-(x1, y1)= (0, 14214)
+i=1, num_units=3
+(x0, y0)= (0, 7240)
+(x1, y1)= (0, 14380)
 cutting point= (0, 14459)
+crop: x0=0, y0=7240, width=760, y1=14459
 
+i=2, num_units=3
 (x0, y0)= (0, 14459)
-(x1, y1)= (0, 21372)
+(x1, y1)= (0, 21570)
 last cutting point= (760, 21472)
