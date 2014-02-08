@@ -54,7 +54,7 @@ def check_horizontal_band(im, x1, y1, band_width, bgcolor, margin):
 			if pixel != bgcolor:
 				if get_color_distance(pixel, bgcolor) > 9.0:
 					diff_count += 1
-					#print y1, diff_count
+					#print "y1=%d, diff_count=%d, threshold=%f" % (y1, diff_count, (width - 2 * margin) * diff_threshold)
 					# threshold 미만으로 불일치가 존재하면 false 반환
 					if diff_count > (width - 2 * margin) * diff_threshold:
 						return (False, j - y1 + 1)
@@ -83,6 +83,7 @@ def check_vertical_band(im, x1, y1, band_width, bgcolor, margin):
 
                 
 def find_bgcolor_band(im, bgcolor, orientation, band_width, x1, y1, margin):
+	#print "find_bgcolor_band(orientation=%s)" % orientation
 	(width, height) = im.size
 	if orientation == "vertical":
 		# 세로 이미지인 경우
@@ -164,23 +165,31 @@ def main():
 	im = Image.open(image_file)
 	(width, height) = im.size
 	print "width=%d, height=%d" % (width, height)
+	if width > height:
+		orientation = "horizontal"
+	else:
+		orientation = "vertical"
+	print "orientation=", orientation
+	if orientation == "horizontal":
+		unit_width = (width - band_width * (num_units - 1)) / num_units
+	else:
+		unit_width = (height - band_width * (num_units - 1)) / num_units
+	print "unit_width=", unit_width
 	# 배경색을 결정함
 	if bgcolor == None:
 		bgcolor = determine_bgcolor(im, 10)
 	print "bgcolor=", bgcolor
 		
 	(x0, y0) = (0, 0)
-	if width > height:
-		orientation = "horizontal"
-	else:
-		orientation = "vertical"
-	print "orientation=", orientation
 	if num_units > 1:
 		for i in range(0, num_units):
+			print "i=%d, num_units=%d" % (i, num_units)
 			if orientation == "horizontal":
-				(x1, y1) = (((i + 1) * width - band_width * num_units) / num_units, y0)
+				#(x1, y1) = (((i + 1) * width - band_width * (num_units - 1)) / num_units, y0)
+				(x1, y1) = (max((unit_width + band_width) * (i + 1), x0 + unit_width), y0)
 			else:
-				(x1, y1) = (x0, ((i + 1) * height - band_width * num_units)/ num_units)
+				#(x1, y1) = (x0, ((i + 1) * height - band_width * (num_units - 1)) / num_units)
+				(x1, y1) = (x0, max((unit_width + band_width) * (i + 1), y0 + unit_width))
 			print "(x0, y0)=", (x0, y0)
 			print "(x1, y1)=", (x1, y1)
 			if x0 >= width - band_width or y0 >= height - band_width or x1 >= width - band_width or y1 >= height - band_width:
@@ -193,8 +202,10 @@ def main():
 				break
 			# 잘라서 저장
 			if orientation == "horizontal":
+				print "crop: x0=%d, y0=%d, x1=%d, height=%d" % (x0, y0, x1, height)
 				sub_im = im.crop((x0, y0, x1, height))
 			else:
+				print "crop: x0=%d, y0=%d, width=%d, y1=%d" % (x0, y0, width, y1)
 				sub_im = im.crop((x0, y0, width, y1))
 			if do_remove_bounding_box:
 				quadruple = sub_im.getbbox()
@@ -203,8 +214,13 @@ def main():
 			try:
 				sub_im.save(name_prefix + "." + str(i + 1) + ext, quality=95)
 			except SystemError:
-				break
-			(x0, y0) = (x1, y1)
+				print "can't save the split image";
+				raise
+			#(x0, y0) = (x1, y1)
+			if orientation == "horizontal":
+				(x0, y0) = (x1, y1)
+			else:
+				(x0, y0) = (x1, y1)
 			print
 		# 나머지 부분 저장
 		print "last cutting point=", (width, height)
