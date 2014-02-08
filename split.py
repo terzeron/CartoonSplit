@@ -37,6 +37,12 @@ def determine_bgcolor(im, band_width):
 
 
 def get_color_distance(color_a, color_b):
+	if color_b == (-1, -1, -1):
+		ca = (color_a[1] + color_a[1] + color_a[2]) / 3
+		if ca < 128:
+			color_b = (0, 0, 0)
+		else:
+			color_b = (255, 255, 255)
 	return pow(color_a[0] - color_b[0], 2) + pow(color_a[1] - color_b[1], 2) + pow(color_a[2] - color_b[2], 2)
 
 
@@ -51,7 +57,19 @@ def check_horizontal_band(im, x1, y1, band_width, bgcolor, margin):
 			pixel = im.getpixel((i, j))
 			#print (i, j), pixel
 			# 배경색과 불일치할 때 색상이 크게 차이나지 않으면 무시함
-			if pixel != bgcolor:
+			if bgcolor == (-1, -1, -1):
+				# blackorwhite
+				if pixel == (0, 0, 0) or pixel == (255, 255, 255):
+					is_same = 1
+				else:
+					is_same = 0
+			else:
+				# specific color
+				if pixel == bgcolor:
+					is_same = 1
+				else:
+					is_same = 0
+			if is_same == 0:
 				if get_color_distance(pixel, bgcolor) > 9.0:
 					diff_count += 1
 					#print "y1=%d, diff_count=%d, threshold=%f" % (y1, diff_count, (width - 2 * margin) * diff_threshold)
@@ -72,7 +90,19 @@ def check_vertical_band(im, x1, y1, band_width, bgcolor, margin):
 			pixel = im.getpixel((i, j))
 			#print (i, j), pixel
 			# 배경색과 불일치할 때 색상이 크게 차이나지 않으면 무시함
-			if pixel != bgcolor:
+			if bgcolor == (-1, -1, -1):
+				# blackorwhite
+				if pixel == (0, 0, 0) or pixel == (255, 255, 255):
+					is_same = 1
+				else:
+					is_same = 0
+			else:
+				# specific color
+				if pixel == bgcolor:
+					is_same = 1
+				else:
+					is_same = 0
+			if is_same == 0:
 				if get_color_distance(pixel, bgcolor) > 9.0:
 					diff_count += 1
 					#print x1, diff_count
@@ -111,7 +141,7 @@ def print_usage():
 	print "\t-n #unit: more than 2"
 	print "\t-b bandwidth: default 100"
 	print "\t-m margin: default 10"
-	print "\t-c bgcolor: white or black"
+	print "\t-c bgcolor: 'white' or 'black', 'blackorwhite'"
 	print "\t-r: remove bouding box"
 	
 			
@@ -146,6 +176,8 @@ def main():
 				bgcolor = (255, 255, 255)
 			elif a == "black":
 				bgcolor = (0, 0, 0)
+			elif a == "blackorwhite":
+				bgcolor = (-1, -1, -1)
 		else:
 			print_usage()
 			print "Unknown option"
