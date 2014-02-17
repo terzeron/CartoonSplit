@@ -5,13 +5,15 @@ import os
 import sys
 import getopt
 import Image
+import operator
 from math import pow
 
 
-default_band_width = 100 # 자르는 기준이 되는 띠의 두께
+default_band_width = 20 # 자르는 기준이 되는 띠의 두께
 default_num_units = 1 # 1/n로 자를 때의 n의 갯수
 default_margin = 0 # 이미지 가장자리 제외하는 여유공간의 크기
-diff_threshold = 0.005 # 0.5%
+default_diff_threshold = 0.005 # 0.5%
+default_quality = 90
 
 
 def sumup_pixels_in_box(im, sum_pixel, pixel_count, x1, y1, band_width):
@@ -36,7 +38,22 @@ def determine_bgcolor(im, band_width):
 	return (sum_pixel[0] / pixel_count, sum_pixel[1] / pixel_count, sum_pixel[2] / pixel_count)
 
 
+def determine_dominant_color(im):
+	(width, height) = im.size
+	color_counter = {}
+	for i in range(0, width, width / 100):
+		for j in range(0, height, height / 100):
+			color = im.getpixel((i, j))
+			if color_counter.has_key(color):
+				color_counter[color] = color_counter[color] + 1
+			else:
+				color_counter[color] = 1
+	sorted_counter = sorted(color_counter.iteritems(), key=operator.itemgetter(1))
+	return sorted_counter[-1][0]
+
+    
 def get_color_distance(color_a, color_b):
+	#print "get_color_distance, a=", color_a, ", b=", color_b
 	if color_b == (-1, -1, -1):
 		ca = (color_a[1] + color_a[1] + color_a[2]) / 3
 		if ca < 128:
@@ -46,7 +63,7 @@ def get_color_distance(color_a, color_b):
 	return pow(color_a[0] - color_b[0], 2) + pow(color_a[1] - color_b[1], 2) + pow(color_a[2] - color_b[2], 2)
 
 
-def check_horizontal_band(im, x1, y1, band_width, bgcolor, margin):
+def check_horizontal_band(im, x1, y1, band_width, bgcolor, margin, diff_threshold):
 	#print "check_horizontal_band(%d, %d)" % (x1, y1)
 	(width, height) = im.size
 	for j in range(y1, y1 + band_width):
@@ -72,14 +89,14 @@ def check_horizontal_band(im, x1, y1, band_width, bgcolor, margin):
 			if is_same == 0:
 				if get_color_distance(pixel, bgcolor) > 9.0:
 					diff_count += 1
-					#print "y1=%d, diff_count=%d, threshold=%f" % (y1, diff_count, (width - 2 * margin) * diff_threshold)
+					#print "y1=%d, diff_count=%d, converted_threshold=%f" % (y1, diff_count, (width - 2 * margin) * diff_threshold)
 					# threshold 미만으로 불일치가 존재하면 false 반환
 					if diff_count > (width - 2 * margin) * diff_threshold:
 						return (False, j - y1 + 1)
 	return (True, 0)
 
 
-def check_vertical_band(im, x1, y1, band_width, bgcolor, margin):
+def check_vertical_band(im, x1, y1, band_width, bgcolor, margin, diff_threshold):
 	#print "check_vertical_band(%d, %d)" % (x1, y1)
 	(width, height) = im.size
 	for i in range(x1, x1 + band_width):
@@ -111,8 +128,8 @@ def check_vertical_band(im, x1, y1, band_width, bgcolor, margin):
 						return (False, i - x1 + 1)
 	return (True, 0)
 
-                
-def find_bgcolor_band(im, bgcolor, orientation, band_width, x1, y1, margin):
+
+def find_bgcolor_band(im, bgcolor, orientation, band_width, x1, y1, margin, diff_threshold):
 	#print "find_bgcolor_band(orientation=%s)" % orientation
 	(width, height) = im.size
 	if orientation == "vertical":
@@ -120,7 +137,7 @@ def find_bgcolor_band(im, bgcolor, orientation, band_width, x1, y1, margin):
 		i = 0
 		while y1 + i < height:
 			# 가로 띠가 배경색으로만 구성되었는지 확인
-			(flag, offset) = check_horizontal_band(im, x1, y1 + i, band_width, bgcolor, margin)
+			(flag, offset) = check_horizontal_band(im, x1, y1 + i, band_width, bgcolor, margin, diff_threshold)
 			if flag:
 				return (x1, y1 + i + band_width / 2)
 			i += offset
@@ -129,7 +146,7 @@ def find_bgcolor_band(im, bgcolor, orientation, band_width, x1, y1, margin):
 		i = 0
 		while x1 + i < width:
 			# 세로 띠가 배경색으로만 구성되었는지 확인
-			(flag, offset) = check_vertical_band(im, x1 + i, y1, band_width, bgcolor, margin)
+			(flag, offset) = check_vertical_band(im, x1 + i, y1, band_width, bgcolor, margin, diff_threshold)
 			if flag:
 				return (x1 + i + band_width / 2, y1)
 			i += offset
@@ -139,16 +156,17 @@ def find_bgcolor_band(im, bgcolor, orientation, band_width, x1, y1, margin):
 def print_usage():
 	print "Usage: %s -n #unit [-b bandwidth] [-m margin] [-c bgcolor] [-r] imagefile" % (sys.argv[0])
 	print "\t-n #unit: more than 2"
-	print "\t-b bandwidth: default 100"
-	print "\t-m margin: default 10"
-	print "\t-c bgcolor: 'white' or 'black', 'blackorwhite'"
+	print "\t-b bandwidth (default %d)" % (default_band_width)
+	print "\t-m margin (default %d)" % (default_margin)
+	print "\t-c bgcolor: 'white' or 'black', 'blackorwhite', 'dominant', '#135fd8', ..."
 	print "\t-r: remove bouding box"
+	print "\t-t: diff threshold (default %f)" % (default_diff_threshold)
 	
 			
 def main():
 	# 옵션 처리
 	try:
-		opts, args = getopt.getopt(sys.argv[1:], "hb:n:m:c:r")
+		opts, args = getopt.getopt(sys.argv[1:], "hb:n:m:c:rt:")
 	except getopt.GetoptError as err:
 		print_usage()
 		print "Invaild option definition"
@@ -156,8 +174,10 @@ def main():
 	band_width = default_band_width
 	num_units = default_num_units
 	margin = default_margin
+	diff_threshold = default_diff_threshold;
 	bgcolor = None
 	do_remove_bounding_box = False
+	do_replace_bgcolor = False
 	for o, a in opts:
 		if o == "-b":
 			band_width = int(a)
@@ -178,6 +198,13 @@ def main():
 				bgcolor = (0, 0, 0)
 			elif a == "blackorwhite":
 				bgcolor = (-1, -1, -1)
+			elif a == "dominant":
+				do_replace_bgcolor = True
+			else:
+				color_value = int(a, 16)
+				bgcolor = (color_value / 65536, (color_value % 65536) / 256, color_value % 256)
+		elif o == "-t":
+			diff_threshold = float(a)
 		else:
 			print_usage()
 			print "Unknown option"
@@ -191,9 +218,9 @@ def main():
 	print "band_width=", band_width
 	print "num_units=", num_units
 	print "margin=", margin
+	print "diff_threshold=", diff_threshold
 	print "arg=", args[0]
-            
-	# 이미지를 열고
+
 	im = Image.open(image_file)
 	(width, height) = im.size
 	print "width=%d, height=%d" % (width, height)
@@ -208,10 +235,12 @@ def main():
 		unit_width = (height - band_width * (num_units - 1)) / num_units
 	print "unit_width=", unit_width
 	# 배경색을 결정함
+	if do_replace_bgcolor:
+		bgcolor = determine_dominant_color(im)
 	if bgcolor == None:
 		bgcolor = determine_bgcolor(im, 10)
 	print "bgcolor=", bgcolor
-		
+            
 	(x0, y0) = (0, 0)
 	if num_units > 1:
 		for i in range(0, num_units):
@@ -227,7 +256,7 @@ def main():
 			if x0 >= width - band_width or y0 >= height - band_width or x1 >= width - band_width or y1 >= height - band_width:
 				break
 			# 배경색으로만 구성된 띠를 찾아냄
-			(x1, y1) = find_bgcolor_band(im, bgcolor, orientation, band_width, x1, y1, margin)
+			(x1, y1) = find_bgcolor_band(im, bgcolor, orientation, band_width, x1, y1, margin, diff_threshold)
 			print "cutting point=", (x1, y1)
 			if (x1, y1) == (-1, -1):
 				print "Error: no splitting"
@@ -244,7 +273,7 @@ def main():
 				if quadruple:
 					sub_im = sub_im.crop(quadruple)
 			try:
-				sub_im.save(name_prefix + "." + str(i + 1) + ext, quality=95)
+				sub_im.save(name_prefix + "." + str(i + 1) + ext, quality=default_quality)
 			except SystemError:
 				print "can't save the split image";
 				raise
@@ -261,7 +290,7 @@ def main():
 			quadruple = sub_im.getbbox()
 			if quadruple:
 				sub_im = sub_im.crop(quadruple)
-		sub_im.save(name_prefix + "." + str(i + 1) + ext, quality=95)
+		sub_im.save(name_prefix + "." + str(i + 1) + ext, quality=default_quality)
 
         
 if __name__ == "__main__":
