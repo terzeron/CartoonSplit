@@ -1,18 +1,19 @@
-band_width= 100
+band_width= 20
 num_units= 2
 margin= 0
+diff_threshold= 0.005
 arg= horizontal.jpg
 width=21472, height=760
 orientation= horizontal
-unit_width= 10686
+unit_width= 10726
 bgcolor= (255, 255, 255)
 i=0, num_units=2
 (x0, y0)= (0, 0)
-(x1, y1)= (10786, 0)
-cutting point= (11410, 0)
-crop: x0=0, y0=0, x1=11410, height=760
+(x1, y1)= (10746, 0)
+cutting point= (11370, 0)
+crop: x0=0, y0=0, x1=11370, height=760
 
 i=1, num_units=2
-(x0, y0)= (11410, 0)
+(x0, y0)= (11370, 0)
 (x1, y1)= (22096, 0)
 last cutting point= (21472, 760)

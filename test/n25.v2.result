@@ -1,6 +1,7 @@
 band_width= 10
 num_units= 25
 margin= 0
+diff_threshold= 0.005
 arg= vertical2.jpg
 width=650, height=25700
 orientation= vertical
