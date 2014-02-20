@@ -6,10 +6,130 @@ arg= vertical2.jpg
 width=650, height=25700
 orientation= vertical
 unit_width= 1018
-bgcolor= (0, 0, 0)
+bgcolor= (-1, -1, -1)
 i=0, num_units=25
 (x0, y0)= (0, 0)
 (x1, y1)= (0, 1028)
+cutting point= (0, 1341)
+crop: x0=0, y0=0, width=650, y1=1341
+
+i=1, num_units=25
+(x0, y0)= (0, 1341)
+(x1, y1)= (0, 2359)
+cutting point= (0, 2527)
+crop: x0=0, y0=1341, width=650, y1=2527
+
+i=2, num_units=25
+(x0, y0)= (0, 2527)
+(x1, y1)= (0, 3545)
+cutting point= (0, 3677)
+crop: x0=0, y0=2527, width=650, y1=3677
+
+i=3, num_units=25
+(x0, y0)= (0, 3677)
+(x1, y1)= (0, 4695)
+cutting point= (0, 4700)
+crop: x0=0, y0=3677, width=650, y1=4700
+
+i=4, num_units=25
+(x0, y0)= (0, 4700)
+(x1, y1)= (0, 5718)
+cutting point= (0, 5989)
+crop: x0=0, y0=4700, width=650, y1=5989
+
+i=5, num_units=25
+(x0, y0)= (0, 5989)
+(x1, y1)= (0, 7007)
+cutting point= (0, 7165)
+crop: x0=0, y0=5989, width=650, y1=7165
+
+i=6, num_units=25
+(x0, y0)= (0, 7165)
+(x1, y1)= (0, 8183)
+cutting point= (0, 8349)
+crop: x0=0, y0=7165, width=650, y1=8349
+
+i=7, num_units=25
+(x0, y0)= (0, 8349)
+(x1, y1)= (0, 9367)
+cutting point= (0, 9613)
+crop: x0=0, y0=8349, width=650, y1=9613
+
+i=8, num_units=25
+(x0, y0)= (0, 9613)
+(x1, y1)= (0, 10631)
+cutting point= (0, 10636)
+crop: x0=0, y0=9613, width=650, y1=10636
+
+i=9, num_units=25
+(x0, y0)= (0, 10636)
+(x1, y1)= (0, 11654)
+cutting point= (0, 11973)
+crop: x0=0, y0=10636, width=650, y1=11973
+
+i=10, num_units=25
+(x0, y0)= (0, 11973)
+(x1, y1)= (0, 12991)
+cutting point= (0, 13229)
+crop: x0=0, y0=11973, width=650, y1=13229
+
+i=11, num_units=25
+(x0, y0)= (0, 13229)
+(x1, y1)= (0, 14247)
+cutting point= (0, 14417)
+crop: x0=0, y0=13229, width=650, y1=14417
+
+i=12, num_units=25
+(x0, y0)= (0, 14417)
+(x1, y1)= (0, 15435)
+cutting point= (0, 15669)
+crop: x0=0, y0=14417, width=650, y1=15669
+
+i=13, num_units=25
+(x0, y0)= (0, 15669)
+(x1, y1)= (0, 16687)
+cutting point= (0, 16692)
+crop: x0=0, y0=15669, width=650, y1=16692
+
+i=14, num_units=25
+(x0, y0)= (0, 16692)
+(x1, y1)= (0, 17710)
+cutting point= (0, 18463)
+crop: x0=0, y0=16692, width=650, y1=18463
+
+i=15, num_units=25
+(x0, y0)= (0, 18463)
+(x1, y1)= (0, 19481)
+cutting point= (0, 19596)
+crop: x0=0, y0=18463, width=650, y1=19596
+
+i=16, num_units=25
+(x0, y0)= (0, 19596)
+(x1, y1)= (0, 20614)
+cutting point= (0, 20619)
+crop: x0=0, y0=19596, width=650, y1=20619
+
+i=17, num_units=25
+(x0, y0)= (0, 20619)
+(x1, y1)= (0, 21637)
+cutting point= (0, 21989)
+crop: x0=0, y0=20619, width=650, y1=21989
+
+i=18, num_units=25
+(x0, y0)= (0, 21989)
+(x1, y1)= (0, 23007)
+cutting point= (0, 23357)
+crop: x0=0, y0=21989, width=650, y1=23357
+
+i=19, num_units=25
+(x0, y0)= (0, 23357)
+(x1, y1)= (0, 24375)
+cutting point= (0, 24547)
+crop: x0=0, y0=23357, width=650, y1=24547
+
+i=20, num_units=25
+(x0, y0)= (0, 24547)
+(x1, y1)= (0, 25565)
 cutting point= (-1, -1)
 Error: no splitting
 last cutting point= (650, 25700)
