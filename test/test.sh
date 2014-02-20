@@ -19,7 +19,10 @@ diff temp.result n3.h.result > /dev/null 2>&1 || (echo "n3.h failure"; exit -1)
 diff temp.result n2.h.result > /dev/null 2>&1 || (echo "n2.h failure"; exit -1)
 
 ../split.py -n 25 -b 10 -c blackorwhite vertical2.jpg > temp.result
-diff temp.result n25.v2.result > /dev/null 2>&1 || (echo "n25.v2 failure"; exit -1)
+diff temp.result n25.v2bw.result > /dev/null 2>&1 || (echo "n25.v2bw failure"; exit -1)
+
+../split.py -n 25 -b 10 -c fuzzy vertical2.jpg > temp.result
+diff temp.result n25.v2f.result > /dev/null 2>&1 || (echo "n25.v2f failure"; exit -1)
 
 ../split.py -n 10 -c fuzzy vertical.jpg > temp.result
 diff temp.result n10.vf.result > /dev/null 2>&1 || (echo "n10.vf failure"; exit -1)
