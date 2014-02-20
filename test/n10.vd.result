@@ -1,0 +1,61 @@
+band_width= 20
+num_units= 10
+margin= 0
+diff_threshold= 0.005
+arg= vertical.jpg
+width=760, height=21472
+orientation= vertical
+unit_width= 2129
+bgcolor= (255, 255, 255)
+i=0, num_units=10
+(x0, y0)= (0, 0)
+(x1, y1)= (0, 2149)
+cutting point= (0, 2986)
+crop: x0=0, y0=0, width=760, y1=2986
+
+i=1, num_units=10
+(x0, y0)= (0, 2986)
+(x1, y1)= (0, 5115)
+cutting point= (0, 5125)
+crop: x0=0, y0=2986, width=760, y1=5125
+
+i=2, num_units=10
+(x0, y0)= (0, 5125)
+(x1, y1)= (0, 7254)
+cutting point= (0, 7264)
+crop: x0=0, y0=5125, width=760, y1=7264
+
+i=3, num_units=10
+(x0, y0)= (0, 7264)
+(x1, y1)= (0, 9393)
+cutting point= (0, 9403)
+crop: x0=0, y0=7264, width=760, y1=9403
+
+i=4, num_units=10
+(x0, y0)= (0, 9403)
+(x1, y1)= (0, 11532)
+cutting point= (0, 11840)
+crop: x0=0, y0=9403, width=760, y1=11840
+
+i=5, num_units=10
+(x0, y0)= (0, 11840)
+(x1, y1)= (0, 13969)
+cutting point= (0, 14274)
+crop: x0=0, y0=11840, width=760, y1=14274
+
+i=6, num_units=10
+(x0, y0)= (0, 14274)
+(x1, y1)= (0, 16403)
+cutting point= (0, 17297)
+crop: x0=0, y0=14274, width=760, y1=17297
+
+i=7, num_units=10
+(x0, y0)= (0, 17297)
+(x1, y1)= (0, 19426)
+cutting point= (0, 20104)
+crop: x0=0, y0=17297, width=760, y1=20104
+
+i=8, num_units=10
+(x0, y0)= (0, 20104)
+(x1, y1)= (0, 22233)
+last cutting point= (760, 21472)

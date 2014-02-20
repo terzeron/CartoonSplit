@@ -21,5 +21,11 @@ diff temp.result n2.h.result > /dev/null 2>&1 || (echo "n2.h failure"; exit -1)
 ../split.py -n 25 -b 10 -c black vertical2.jpg > temp.result
 diff temp.result n25.v2.result > /dev/null 2>&1 || (echo "n25.v2 failure"; exit -1)
 
+../split.py -n 10 -c fuzzy vertical.jpg > temp.result
+diff temp.result n10.vf.result > /dev/null 2>&1 || (echo "n10.vf failure"; exit -1)
+
+../split.py -n 10 -c dominant vertical.jpg > temp.result
+diff temp.result n10.vd.result > /dev/null 2>&1 || (echo "n10.vd failure"; exit -1)
+
 echo "success"
 rm -f temp.result vertical*.*.jpg horizontal*.*.jpg

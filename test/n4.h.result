@@ -16,14 +16,14 @@ crop: x0=0, y0=0, x1=5866, height=760
 i=1, num_units=4
 (x0, y0)= (5866, 0)
 (x1, y1)= (11219, 0)
-cutting point= (11370, 0)
-crop: x0=5866, y0=0, x1=11370, height=760
+cutting point= (11371, 0)
+crop: x0=5866, y0=0, x1=11371, height=760
 
 i=2, num_units=4
-(x0, y0)= (11370, 0)
-(x1, y1)= (16723, 0)
+(x0, y0)= (11371, 0)
+(x1, y1)= (16724, 0)
 cutting point= (16798, 0)
-crop: x0=11370, y0=0, x1=16798, height=760
+crop: x0=11371, y0=0, x1=16798, height=760
 
 i=3, num_units=4
 (x0, y0)= (16798, 0)
