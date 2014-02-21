@@ -21,14 +21,20 @@ diff temp.result n2.h.result > /dev/null 2>&1 || (echo "n2.h failure"; exit -1)
 ../split.py -n 25 -b 10 -c blackorwhite vertical2.jpg > temp.result
 diff temp.result n25.v2bw.result > /dev/null 2>&1 || (echo "n25.v2bw failure"; exit -1)
 
-../split.py -n 25 -b 10 -c fuzzy vertical2.jpg > temp.result
-diff temp.result n25.v2f.result > /dev/null 2>&1 || (echo "n25.v2f failure"; exit -1)
+../split.py -n 10 -c dominant vertical.jpg > temp.result
+diff temp.result n10.vd.result > /dev/null 2>&1 || (echo "n10.vd failure"; exit -1)
 
 ../split.py -n 10 -c fuzzy vertical.jpg > temp.result
 diff temp.result n10.vf.result > /dev/null 2>&1 || (echo "n10.vf failure"; exit -1)
 
-../split.py -n 10 -c dominant vertical.jpg > temp.result
-diff temp.result n10.vd.result > /dev/null 2>&1 || (echo "n10.vd failure"; exit -1)
+../split.py -n 25 -b 10 -c fuzzy vertical2.jpg > temp.result
+diff temp.result n25.v2f.result > /dev/null 2>&1 || (echo "n25.v2f failure"; exit -1)
+
+../split.py -n 25 -c fuzzy vertical3.jpg > temp.result
+diff temp.result n25.v3f.result > /dev/null 2>&1 || (echo "n25.v3f failure"; exit -1)
+
+../split.py -n 25 -c fuzzy vertical4.jpg > temp.result
+diff temp.result n25.v4f.result > /dev/null 2>&1 || (echo "n25.v4f failure"; exit -1)
 
 echo "success"
 rm -f temp.result vertical*.*.jpg horizontal*.*.jpg
