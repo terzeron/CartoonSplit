@@ -12,7 +12,7 @@ from math import pow, sqrt
 default_band_width = 20 # 자르는 기준이 되는 띠의 두께
 default_num_units = 1 # 1/n로 자를 때의 n의 갯수
 default_margin = 0 # 이미지 가장자리 제외하는 여유공간의 크기
-default_diff_threshold = 0.005 # 0.5%
+default_diff_threshold = 0.05 # 5%
 default_quality = 90
 
 
