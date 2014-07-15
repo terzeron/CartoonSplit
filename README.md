@@ -6,11 +6,11 @@ This utility is a python script made by using PIL (Python Image Library).
 
 Requirements
 ------------
-PIL (Python Image Library)  
+Pillow: PIL (Python Image Library) fork
 You can install this python module by
- > $ pip install PIL
+ > $ pip install pillow
  
-or download from http://www.pythonware.com/products/pil.
+or download from https://pillow.readthedocs.org/en/latest
 
 Usage
 -----

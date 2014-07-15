@@ -4,7 +4,7 @@
 import os
 import sys
 import getopt
-import Image
+from PIL import Image
 import operator
 from math import pow, sqrt
 

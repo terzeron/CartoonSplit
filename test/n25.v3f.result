@@ -1,7 +1,7 @@
 band_width= 20
 num_units= 25
 margin= 0
-diff_threshold= 0.005
+diff_threshold= 0.05
 arg= vertical3.jpg
 width=690, height=55178
 orientation= vertical
@@ -16,20 +16,20 @@ crop: x0=0, y0=0, width=690, y1=2217
 i=1, num_units=25
 (x0, y0)= (0, 2217)
 (x1, y1)= (0, 4414)
-cutting point= (0, 4896)
-crop: x0=0, y0=2217, width=690, y1=4896
+cutting point= (0, 4894)
+crop: x0=0, y0=2217, width=690, y1=4894
 
 i=2, num_units=25
-(x0, y0)= (0, 4896)
-(x1, y1)= (0, 7083)
-cutting point= (0, 7093)
-crop: x0=0, y0=4896, width=690, y1=7093
+(x0, y0)= (0, 4894)
+(x1, y1)= (0, 7081)
+cutting point= (0, 7091)
+crop: x0=0, y0=4894, width=690, y1=7091
 
 i=3, num_units=25
-(x0, y0)= (0, 7093)
-(x1, y1)= (0, 9280)
+(x0, y0)= (0, 7091)
+(x1, y1)= (0, 9278)
 cutting point= (0, 9418)
-crop: x0=0, y0=7093, width=690, y1=9418
+crop: x0=0, y0=7091, width=690, y1=9418
 
 i=4, num_units=25
 (x0, y0)= (0, 9418)
@@ -40,26 +40,26 @@ crop: x0=0, y0=9418, width=690, y1=11834
 i=5, num_units=25
 (x0, y0)= (0, 11834)
 (x1, y1)= (0, 14021)
-cutting point= (0, 14185)
-crop: x0=0, y0=11834, width=690, y1=14185
+cutting point= (0, 14181)
+crop: x0=0, y0=11834, width=690, y1=14181
 
 i=6, num_units=25
-(x0, y0)= (0, 14185)
-(x1, y1)= (0, 16372)
-cutting point= (0, 16382)
-crop: x0=0, y0=14185, width=690, y1=16382
+(x0, y0)= (0, 14181)
+(x1, y1)= (0, 16368)
+cutting point= (0, 16378)
+crop: x0=0, y0=14181, width=690, y1=16378
 
 i=7, num_units=25
-(x0, y0)= (0, 16382)
-(x1, y1)= (0, 18569)
-cutting point= (0, 18579)
-crop: x0=0, y0=16382, width=690, y1=18579
+(x0, y0)= (0, 16378)
+(x1, y1)= (0, 18565)
+cutting point= (0, 18575)
+crop: x0=0, y0=16378, width=690, y1=18575
 
 i=8, num_units=25
-(x0, y0)= (0, 18579)
-(x1, y1)= (0, 20766)
+(x0, y0)= (0, 18575)
+(x1, y1)= (0, 20762)
 cutting point= (0, 21082)
-crop: x0=0, y0=18579, width=690, y1=21082
+crop: x0=0, y0=18575, width=690, y1=21082
 
 i=9, num_units=25
 (x0, y0)= (0, 21082)
@@ -70,38 +70,38 @@ crop: x0=0, y0=21082, width=690, y1=23279
 i=10, num_units=25
 (x0, y0)= (0, 23279)
 (x1, y1)= (0, 25466)
-cutting point= (0, 25764)
-crop: x0=0, y0=23279, width=690, y1=25764
+cutting point= (0, 25610)
+crop: x0=0, y0=23279, width=690, y1=25610
 
 i=11, num_units=25
-(x0, y0)= (0, 25764)
-(x1, y1)= (0, 27951)
-cutting point= (0, 28063)
-crop: x0=0, y0=25764, width=690, y1=28063
+(x0, y0)= (0, 25610)
+(x1, y1)= (0, 27797)
+cutting point= (0, 28061)
+crop: x0=0, y0=25610, width=690, y1=28061
 
 i=12, num_units=25
-(x0, y0)= (0, 28063)
-(x1, y1)= (0, 30250)
-cutting point= (0, 30260)
-crop: x0=0, y0=28063, width=690, y1=30260
+(x0, y0)= (0, 28061)
+(x1, y1)= (0, 30248)
+cutting point= (0, 30258)
+crop: x0=0, y0=28061, width=690, y1=30258
 
 i=13, num_units=25
-(x0, y0)= (0, 30260)
-(x1, y1)= (0, 32447)
-cutting point= (0, 32561)
-crop: x0=0, y0=30260, width=690, y1=32561
+(x0, y0)= (0, 30258)
+(x1, y1)= (0, 32445)
+cutting point= (0, 32550)
+crop: x0=0, y0=30258, width=690, y1=32550
 
 i=14, num_units=25
-(x0, y0)= (0, 32561)
-(x1, y1)= (0, 34748)
-cutting point= (0, 34758)
-crop: x0=0, y0=32561, width=690, y1=34758
+(x0, y0)= (0, 32550)
+(x1, y1)= (0, 34737)
+cutting point= (0, 34747)
+crop: x0=0, y0=32550, width=690, y1=34747
 
 i=15, num_units=25
-(x0, y0)= (0, 34758)
-(x1, y1)= (0, 36945)
+(x0, y0)= (0, 34747)
+(x1, y1)= (0, 36934)
 cutting point= (0, 37242)
-crop: x0=0, y0=34758, width=690, y1=37242
+crop: x0=0, y0=34747, width=690, y1=37242
 
 i=16, num_units=25
 (x0, y0)= (0, 37242)
@@ -124,28 +124,30 @@ crop: x0=0, y0=41674, width=690, y1=43871
 i=19, num_units=25
 (x0, y0)= (0, 43871)
 (x1, y1)= (0, 46058)
-cutting point= (0, 46412)
-crop: x0=0, y0=43871, width=690, y1=46412
+cutting point= (0, 46078)
+crop: x0=0, y0=43871, width=690, y1=46078
 
 i=20, num_units=25
-(x0, y0)= (0, 46412)
-(x1, y1)= (0, 48599)
-cutting point= (0, 48778)
-crop: x0=0, y0=46412, width=690, y1=48778
+(x0, y0)= (0, 46078)
+(x1, y1)= (0, 48265)
+cutting point= (0, 48350)
+crop: x0=0, y0=46078, width=690, y1=48350
 
 i=21, num_units=25
-(x0, y0)= (0, 48778)
-(x1, y1)= (0, 50965)
-cutting point= (0, 51290)
-crop: x0=0, y0=48778, width=690, y1=51290
+(x0, y0)= (0, 48350)
+(x1, y1)= (0, 50537)
+cutting point= (0, 50547)
+crop: x0=0, y0=48350, width=690, y1=50547
 
 i=22, num_units=25
-(x0, y0)= (0, 51290)
-(x1, y1)= (0, 53477)
-cutting point= (0, 53706)
-crop: x0=0, y0=51290, width=690, y1=53706
+(x0, y0)= (0, 50547)
+(x1, y1)= (0, 52734)
+cutting point= (0, 52744)
+crop: x0=0, y0=50547, width=690, y1=52744
 
 i=23, num_units=25
-(x0, y0)= (0, 53706)
-(x1, y1)= (0, 55893)
+(x0, y0)= (0, 52744)
+(x1, y1)= (0, 54931)
+cutting point= (-1, -1)
+Error: no splitting
 last cutting point= (690, 55178)

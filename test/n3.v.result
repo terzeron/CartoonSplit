@@ -1,7 +1,7 @@
 band_width= 20
 num_units= 3
 margin= 0
-diff_threshold= 0.005
+diff_threshold= 0.05
 arg= vertical.jpg
 width=760, height=21472
 orientation= vertical
@@ -10,14 +10,14 @@ bgcolor= (255, 255, 255)
 i=0, num_units=3
 (x0, y0)= (0, 0)
 (x1, y1)= (0, 7164)
-cutting point= (0, 7197)
-crop: x0=0, y0=0, width=760, y1=7197
+cutting point= (0, 7196)
+crop: x0=0, y0=0, width=760, y1=7196
 
 i=1, num_units=3
-(x0, y0)= (0, 7197)
-(x1, y1)= (0, 14341)
+(x0, y0)= (0, 7196)
+(x1, y1)= (0, 14340)
 cutting point= (0, 14419)
-crop: x0=0, y0=7197, width=760, y1=14419
+crop: x0=0, y0=7196, width=760, y1=14419
 
 i=2, num_units=3
 (x0, y0)= (0, 14419)

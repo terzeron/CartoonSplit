@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
-import Image
+from PIL import Image
 
 
 def print_usage():
