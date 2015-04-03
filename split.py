@@ -238,6 +238,8 @@ def main():
 	print "arg=", args[0]
 
 	im = Image.open(image_file)
+	if im.mode != "RGB":
+		im = im.convert("RGB")
 	(width, height) = im.size
 	print "width=%d, height=%d" % (width, height)
 	if width > height:
