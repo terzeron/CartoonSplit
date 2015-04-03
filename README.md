@@ -14,11 +14,13 @@ or download from https://pillow.readthedocs.org/en/latest
 
 Usage
 -----
-./split.py -n #unit [-b bandwidth] [-m margin] [-r] imagefile  
+./split.py -n #unit [-b bandwidth] [-m margin] [-t threshold] imagefile  
   	-n #unit: more than 2  
   	-b bandwidth: default 100  
   	-m margin: default 10  
-  	-r: remove bouding box  
+	-c color: background color
+		You may use some pre-defined value 'blackorwhite', 'dominant', or 'fuzzy'.
+	-t threshold: diff threshold (default 0.05; 5%)
 
 Tutorial
 --------
@@ -28,7 +30,8 @@ There will be 5 sub images at maximum after splitting the original image file.
 The '-n' option specifies the maximum number of splitted sub images.  
 The '-b' option specifies the width of split band.  
 The '-m' option specifies the marginal size which can be ignored.  
-The '-r' option is obsoleted for the PIL library functionality.  
+The '-c' option specifies the background color.
+The '-t' option specifies the differential threshold.
   
  > $ merge.py newimagefile subimagefile1 subimagefile2 ...
 

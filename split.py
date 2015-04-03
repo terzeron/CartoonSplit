@@ -164,7 +164,8 @@ def find_bgcolor_band(im, bgcolor, orientation, band_width, x1, y1, margin, diff
 
 
 def print_usage():
-	print "Usage: %s -n #unit [-b bandwidth] [-m margin] [-c bgcolor] [-r] imagefile" % (sys.argv[0])
+	print "Usage: %s [-r] -n #unit [-b bandwidth] [-m margin] [-c bgcolor] [-t threshold] imagefile" % (sys.argv[0])
+	print "\t-r: remove bouding box"
 	print "\t-n #unit: more than 2"
 	print "\t-b bandwidth (default %d)" % (default_band_width)
 	print "\t-m margin (default %d)" % (default_margin)
@@ -172,8 +173,7 @@ def print_usage():
 	print "\t\t\t\tblackorwhite: black or white"
 	print "\t\t\t\tdominant: most dominant color (automatic)"
 	print "\t\t\t\tfuzzy: either black, white or prevailing color (automatic)"
-	print "\t-r: remove bouding box"
-	print "\t-t: diff threshold (default %f)" % (default_diff_threshold)
+	print "\t-t threshold: diff threshold (default %f)" % (default_diff_threshold)
 	
 			
 def main():
@@ -189,7 +189,6 @@ def main():
 	margin = default_margin
 	diff_threshold = default_diff_threshold;
 	bgcolor = None
-	do_remove_bounding_box = False
 	do_use_dominant_color = False
 	is_fuzzy = False
 	for o, a in opts:
@@ -203,8 +202,6 @@ def main():
 				print_usage()
 				print "n must be more than 1"
 				sys.exit(-1)
-		elif o == "-r":
-			do_remove_bounding_box = True
 		elif o == "-c":
 			if a == "white":
 				bgcolor = (255, 255, 255)
@@ -287,10 +284,6 @@ def main():
 			else:
 				print "crop: x0=%d, y0=%d, width=%d, y1=%d" % (x0, y0, width, y1)
 				sub_im = im.crop((x0, y0, width, y1))
-			if do_remove_bounding_box:
-				quadruple = sub_im.getbbox()
-				if quadruple:
-					sub_im = sub_im.crop(quadruple)
 			try:
 				sub_im.save(name_prefix + "." + str(i + 1) + ext, quality=default_quality)
 			except SystemError:
@@ -305,10 +298,6 @@ def main():
 		# 나머지 부분 저장
 		print "last cutting point=", (width, height)
 		sub_im = im.crop((x0, y0, width, height))
-		if do_remove_bounding_box:
-			quadruple = sub_im.getbbox()
-			if quadruple:
-				sub_im = sub_im.crop(quadruple)
 		sub_im.save(name_prefix + "." + str(i + 1) + ext, quality=default_quality)
 
         
