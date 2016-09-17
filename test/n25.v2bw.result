@@ -1,145 +1,145 @@
-band_width= 10
-num_units= 25
+bandWidth= 10
+numUnits= 25
 margin= 0
-diff_threshold= 0.05
+diffThreshold= 0.05
 arg= vertical2.jpg
 width=650, height=25700
 orientation= vertical
-unit_width= 1018
+unitWidth= 1018
 bgcolor= (-1, -1, -1)
-i=0, num_units=25
+i=0, numUnits=25
 (x0, y0)= (0, 0)
 (x1, y1)= (0, 1028)
 cutting point= (0, 1340)
 crop: x0=0, y0=0, width=650, y1=1340
 
-i=1, num_units=25
+i=1, numUnits=25
 (x0, y0)= (0, 1340)
 (x1, y1)= (0, 2358)
 cutting point= (0, 2527)
 crop: x0=0, y0=1340, width=650, y1=2527
 
-i=2, num_units=25
+i=2, numUnits=25
 (x0, y0)= (0, 2527)
 (x1, y1)= (0, 3545)
 cutting point= (0, 3675)
 crop: x0=0, y0=2527, width=650, y1=3675
 
-i=3, num_units=25
+i=3, numUnits=25
 (x0, y0)= (0, 3675)
 (x1, y1)= (0, 4693)
 cutting point= (0, 4698)
 crop: x0=0, y0=3675, width=650, y1=4698
 
-i=4, num_units=25
+i=4, numUnits=25
 (x0, y0)= (0, 4698)
 (x1, y1)= (0, 5716)
 cutting point= (0, 5989)
 crop: x0=0, y0=4698, width=650, y1=5989
 
-i=5, num_units=25
+i=5, numUnits=25
 (x0, y0)= (0, 5989)
 (x1, y1)= (0, 7007)
 cutting point= (0, 7161)
 crop: x0=0, y0=5989, width=650, y1=7161
 
-i=6, num_units=25
+i=6, numUnits=25
 (x0, y0)= (0, 7161)
 (x1, y1)= (0, 8179)
 cutting point= (0, 8347)
 crop: x0=0, y0=7161, width=650, y1=8347
 
-i=7, num_units=25
+i=7, numUnits=25
 (x0, y0)= (0, 8347)
 (x1, y1)= (0, 9365)
 cutting point= (0, 9477)
 crop: x0=0, y0=8347, width=650, y1=9477
 
-i=8, num_units=25
+i=8, numUnits=25
 (x0, y0)= (0, 9477)
 (x1, y1)= (0, 10495)
 cutting point= (0, 10500)
 crop: x0=0, y0=9477, width=650, y1=10500
 
-i=9, num_units=25
+i=9, numUnits=25
 (x0, y0)= (0, 10500)
 (x1, y1)= (0, 11518)
 cutting point= (0, 11577)
 crop: x0=0, y0=10500, width=650, y1=11577
 
-i=10, num_units=25
+i=10, numUnits=25
 (x0, y0)= (0, 11577)
 (x1, y1)= (0, 12595)
 cutting point= (0, 12600)
 crop: x0=0, y0=11577, width=650, y1=12600
 
-i=11, num_units=25
+i=11, numUnits=25
 (x0, y0)= (0, 12600)
 (x1, y1)= (0, 13618)
 cutting point= (0, 13623)
 crop: x0=0, y0=12600, width=650, y1=13623
 
-i=12, num_units=25
+i=12, numUnits=25
 (x0, y0)= (0, 13623)
 (x1, y1)= (0, 14641)
 cutting point= (0, 14646)
 crop: x0=0, y0=13623, width=650, y1=14646
 
-i=13, num_units=25
+i=13, numUnits=25
 (x0, y0)= (0, 14646)
 (x1, y1)= (0, 15664)
 cutting point= (0, 15669)
 crop: x0=0, y0=14646, width=650, y1=15669
 
-i=14, num_units=25
+i=14, numUnits=25
 (x0, y0)= (0, 15669)
 (x1, y1)= (0, 16687)
 cutting point= (0, 16692)
 crop: x0=0, y0=15669, width=650, y1=16692
 
-i=15, num_units=25
+i=15, numUnits=25
 (x0, y0)= (0, 16692)
 (x1, y1)= (0, 17710)
 cutting point= (0, 18462)
 crop: x0=0, y0=16692, width=650, y1=18462
 
-i=16, num_units=25
+i=16, numUnits=25
 (x0, y0)= (0, 18462)
 (x1, y1)= (0, 19480)
 cutting point= (0, 19589)
 crop: x0=0, y0=18462, width=650, y1=19589
 
-i=17, num_units=25
+i=17, numUnits=25
 (x0, y0)= (0, 19589)
 (x1, y1)= (0, 20607)
 cutting point= (0, 20612)
 crop: x0=0, y0=19589, width=650, y1=20612
 
-i=18, num_units=25
+i=18, numUnits=25
 (x0, y0)= (0, 20612)
 (x1, y1)= (0, 21630)
 cutting point= (0, 21987)
 crop: x0=0, y0=20612, width=650, y1=21987
 
-i=19, num_units=25
+i=19, numUnits=25
 (x0, y0)= (0, 21987)
 (x1, y1)= (0, 23005)
 cutting point= (0, 23353)
 crop: x0=0, y0=21987, width=650, y1=23353
 
-i=20, num_units=25
+i=20, numUnits=25
 (x0, y0)= (0, 23353)
 (x1, y1)= (0, 24371)
 cutting point= (0, 24539)
 crop: x0=0, y0=23353, width=650, y1=24539
 
-i=21, num_units=25
+i=21, numUnits=25
 (x0, y0)= (0, 24539)
 (x1, y1)= (0, 25557)
 cutting point= (0, 25693)
 crop: x0=0, y0=24539, width=650, y1=25693
 
-i=22, num_units=25
+i=22, numUnits=25
 (x0, y0)= (0, 25693)
 (x1, y1)= (0, 26711)
 last cutting point= (650, 25700)

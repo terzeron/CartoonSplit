@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import sys
@@ -6,7 +6,7 @@ from PIL import Image
 
 
 def print_usage():
-	print "Usage: %s new old..." % (sys.argv[0])
+	print("Usage: %s new old..." % (sys.argv[0]))
 	
 			
 def main():
@@ -15,15 +15,15 @@ def main():
 	total_width = 0
 	total_height = 0
 	for i in range(count):
-		print sys.argv[i + 2]
+		print(sys.argv[i + 2])
 		im.append(Image.open(sys.argv[i + 2]))
 		(width, height) = im[i].size
-		print width, height
+		print("%d %d" % (width, height))
 		if total_width < width:
 			total_width = width
 		total_height += height
 
-	print total_width, total_height
+	print("%d %d" % (total_width, total_height))
 	new_im = Image.new("RGB", (total_width, total_height), "white");
 	box = (0, 0)
 	total_height = 0
@@ -32,7 +32,7 @@ def main():
 		(width, height) = a_im.size
 		total_height += height
 		box = (0, total_height)
-		print "box=", box
+		print("box=", box)
 	new_im.save(sys.argv[1], quality=95)
 
         
