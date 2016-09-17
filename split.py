@@ -4,7 +4,7 @@
 import os
 import sys
 import getopt
-from PIL import Image
+from PIL import Image, ImageStat
 import operator
 from math import pow, sqrt
 
@@ -187,8 +187,17 @@ def determineColorOption(a):
     return (bgcolor, isFuzzy, doUseDominantColor)
 
 
+def checkProportionAndUniformity(im):
+    (width, height) = im.size
+    stat = ImageStat.Stat(im)
+    print("%f %f %f" % ((width/height), (height/width), max(stat.stddev)))
+    if (width / height < 0.01 or height / width < 0.01) and max(stat.stddev) < 1:
+        return False
+    return True
+
+
 def printUsage():
-    print("Usage: %s [-r] -n #unit [-b bandwidth] [-m margin] [-c bgcolor] [-t threshold] imagefile" % (sys.argv[0]))
+    print("Usage: %s [-r] -n #unit [-b bandwidth] [-m margin] [-c bgcolor] [-t threshold] [-v] [-i] imagefile" % (sys.argv[0]))
     print("\t-r: remove bouding box")
     print("\t-n #unit: more than 2")
     print("\t-b bandwidth (default %d)" % (defaultBandWith))
@@ -198,6 +207,8 @@ def printUsage():
     print("\t\tdominant: most dominant color (automatic)")
     print("\t\tfuzzy: either black, white or prevailing color (automatic)")
     print("\t-t threshold: diff threshold (default %f)" % (defaultDiffThreshold))
+    print("\t-v: split vertically")
+    print("\t-i: ignore too thin and uniform slice (without saving)")
     
             
 def main():
@@ -209,13 +220,13 @@ def main():
     bgcolor = None
     doUseDominantColor = False
     isFuzzy = False
-    doFlipToLeft = False
     doSplitVertically = False
+    doIgnoreTooThinAndUniformSlice = False
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hb:n:m:c:rt:vl")
+        opts, args = getopt.getopt(sys.argv[1:], "hb:n:m:c:rt:vi")
     except getopt.GetoptError as err:
         printUsage()
-        print("Invaild option definition")
+        sys.stderr.write("Error: Invaild option definition\n")
         sys.exit(-1)
     for o, a in opts:
         if o == "-b":
@@ -226,7 +237,7 @@ def main():
             numUnits = int(a)
             if numUnits < 2:
                 printUsage()
-                print("n must be more than 1")
+                sys.stderr.write("Error: n must be more than 1\n")
                 sys.exit(-1)
         elif o == "-c":
             colorOption = determineColorOption(a)
@@ -236,10 +247,10 @@ def main():
             (bgcolor, isFuzzy, doUseDominantColor) = colorOption
         elif o == "-t":
             diffThreshold = float(a)
-        elif o == "-l":
-            doFlipToLeft = True
         elif o == "-v":
             doSplitVertically = True
+        elif o == "-i":
+            doIgnoreTooThinAndUniformSlice = True
         else:
             printUsage()
             sys.exit(-1)
@@ -260,7 +271,7 @@ def main():
         im = im.convert("RGB")
     (width, height) = im.size
     print("width=%d, height=%d" % (width, height))
-    if width > height:
+    if width > height or doSplitVertically:
         orientation = "horizontal"
     else:
         orientation = "vertical"
@@ -294,7 +305,7 @@ def main():
             (x1, y1) = findBgcolorBand(im, bgcolor, orientation, bandWidth, x1, y1, margin, diffThreshold, isFuzzy)
             print("cutting point=", (x1, y1))
             if (x1, y1) == (-1, -1):
-                print("Error: no splitting")
+                sys.stderr.write("Error: no splitting\n")
                 break
             # 잘라서 저장
             if orientation == "horizontal":
@@ -303,21 +314,33 @@ def main():
             else:
                 print("crop: x0=%d, y0=%d, width=%d, y1=%d" % (x0, y0, width, y1))
                 subIm = im.crop((x0, y0, width, y1))
-            try:
-                subIm.save(namePrefix + "." + str(i + 1) + ext, quality=defaultQuality)
-            except SystemError:
-                print("can't save the split image");
-                raise
-            #(x0, y0) = (x1, y1)
-            if orientation == "horizontal":
-                (x0, y0) = (x1, y1)
+
+            if doIgnoreTooThinAndUniformSlice:
+                doSave = checkProportionAndUniformity(subIm)
             else:
-                (x0, y0) = (x1, y1)
-            print()
-                # 나머지 부분 저장
+                doSave = True
+            if doSave:
+                try:
+                    subIm.save(namePrefix + "." + str(i + 1) + ext, quality=defaultQuality)
+                except SystemError:
+                    sys.stderr.write("Error: can't save the split image\n");
+                    raise
+                #(x0, y0) = (x1, y1)
+                if orientation == "horizontal":
+                    (x0, y0) = (x1, y1)
+                else:
+                    (x0, y0) = (x1, y1)
+                print()
+
+        # 나머지 부분 저장
         print("last cutting point=", (width, height))
         subIm = im.crop((x0, y0, width, height))
-        subIm.save(namePrefix + "." + str(i + 1) + ext, quality=defaultQuality)
+        if doIgnoreTooThinAndUniformSlice:
+            doSave = checkProportionAndUniformity(subIm)
+        else:
+            doSave = True
+        if doSave:
+            subIm.save(namePrefix + "." + str(i + 1) + ext, quality=defaultQuality)
 
         
 if __name__ == "__main__":
