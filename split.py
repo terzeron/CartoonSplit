@@ -197,8 +197,7 @@ def checkProportionAndUniformity(im):
 
 
 def printUsage():
-    print("Usage: %s [-r] -n #unit [-b bandwidth] [-m margin] [-c bgcolor] [-t threshold] [-v] [-i] imagefile" % (sys.argv[0]))
-    print("\t-r: remove bouding box")
+    print("Usage: %s -n #unit [-b bandwidth] [-m margin] [-c bgcolor] [-t threshold] [-v] [-i] imagefile" % (sys.argv[0]))
     print("\t-n #unit: more than 2")
     print("\t-b bandwidth (default %d)" % (defaultBandWith))
     print("\t-m margin (default %d)" % (defaultMargin))
@@ -223,7 +222,7 @@ def main():
     doSplitVertically = False
     doIgnoreTooThinAndUniformSlice = False
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hb:n:m:c:rt:vi")
+        opts, args = getopt.getopt(sys.argv[1:], "hb:n:m:c:t:vi")
     except getopt.GetoptError as err:
         printUsage()
         sys.stderr.write("Error: Invaild option definition\n")
