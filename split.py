@@ -41,8 +41,8 @@ def determineBgcolor(im, bandWidth):
 def determineDominantColor(im):
     (width, height) = im.size
     colorCounter = {}
-    for i in range(0, width, int(width / 100)):
-        for j in range(0, height, int(height / 100)):
+    for i in range(0, width, max(int(width / 100), 1)):
+        for j in range(0, height, max(int(height / 100), 1)):
             color = im.getpixel((i, j))
             if color in colorCounter:
                 colorCounter[color] = colorCounter[color] + 1
@@ -191,7 +191,7 @@ def checkProportionAndUniformity(im):
     (width, height) = im.size
     stat = ImageStat.Stat(im)
     print("width/height=%f, height/width=%f, stat.stddev=%f" % ((width/height), (height/width), max(stat.stddev)))
-    if (width / height < 0.01 or height / width < 0.01) or max(stat.stddev) < 1:
+    if (width / height < 0.03 or height / width < 0.01) or max(stat.stddev) < 1:
         return False
     return True
 
@@ -304,6 +304,7 @@ def main():
             (x1, y1) = findBgcolorBand(im, bgcolor, orientation, bandWidth, x1, y1, margin, diffThreshold, isFuzzy)
             print("cutting point=", (x1, y1))
             if (x1, y1) == (-1, -1):
+                sys.stderr.write("Warning: no splitting\n")
                 break
             # 잘라서 저장
             if orientation == "horizontal":
