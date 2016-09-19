@@ -187,12 +187,14 @@ def determineColorOption(a):
     return (bgcolor, isFuzzy, doUseDominantColor)
 
 
-def checkProportionAndUniformity(im):
-    (width, height) = im.size
-    stat = ImageStat.Stat(im)
-    print("width/height=%f, height/width=%f, stat.stddev=%f" % ((width/height), (height/width), max(stat.stddev)))
-    if (width / height < 0.03 or height / width < 0.01) or max(stat.stddev) < 1:
-        return False
+def checkProportion(width, height, unitWidth, orientation, stat):
+    print("unitWidth/2.0=%f, width=%f, height=%f, width/height=%f, height/width=%f" % ((unitWidth/2.0), width, height, (width/height), (height/width)))
+    if orientation == "horizontal":
+        if width < float(unitWidth / 2.0):
+            return False
+    else:
+        if height < float(unitWidth / 2.0):
+            return False
     return True
 
 
@@ -207,7 +209,7 @@ def printUsage():
     print("\t\tfuzzy: either black, white or prevailing color (automatic)")
     print("\t-t threshold: diff threshold (default %f)" % (defaultDiffThreshold))
     print("\t-v: split vertically")
-    print("\t-i: ignore too thin and uniform slice (without saving)")
+    print("\t-i: ignore too thin slice (without saving)")
     
             
 def main():
@@ -220,7 +222,7 @@ def main():
     doUseDominantColor = False
     isFuzzy = False
     doSplitVertically = False
-    doIgnoreTooThinAndUniformSlice = False
+    doIgnoreTooThinSlice = False
     try:
         opts, args = getopt.getopt(sys.argv[1:], "hb:n:m:c:t:vi")
     except getopt.GetoptError as err:
@@ -249,7 +251,7 @@ def main():
         elif o == "-v":
             doSplitVertically = True
         elif o == "-i":
-            doIgnoreTooThinAndUniformSlice = True
+            doIgnoreTooThinSlice = True
         else:
             printUsage()
             sys.exit(-1)
@@ -306,6 +308,17 @@ def main():
             if (x1, y1) == (-1, -1):
                 sys.stderr.write("Warning: no splitting\n")
                 break
+
+            if doIgnoreTooThinSlice:
+                # 너무 가느다란 조각인지 확인
+                doSaveNewSubImg = checkProportion(x1 - x0, y1 - y0, unitWidth, orientation)
+            else:
+                doSaveNewSubImg = True
+            if not doSaveNewSubImg:
+                # 맨 왼쪽이면 다음 조각에 붙이고
+                # 가운데 조각이면 아무데나 붙이고
+                # 맨 오른쪽이면 이전 조각에 붙임
+                
             # 잘라서 저장
             if orientation == "horizontal":
                 print("crop: x0=%d, y0=%d, x1=%d, height=%d" % (x0, y0, x1, height))
@@ -314,32 +327,25 @@ def main():
                 print("crop: x0=%d, y0=%d, width=%d, y1=%d" % (x0, y0, width, y1))
                 subIm = im.crop((x0, y0, width, y1))
 
-            if doIgnoreTooThinAndUniformSlice:
-                doSave = checkProportionAndUniformity(subIm)
-            else:
-                doSave = True
-            if doSave:
-                try:
-                    subIm.save(namePrefix + "." + str(i + 1) + ext, quality=defaultQuality)
-                except SystemError:
-                    sys.stderr.write("Error: can't save the split image\n");
-                    raise
-                #(x0, y0) = (x1, y1)
-                if orientation == "horizontal":
-                    (x0, y0) = (x1, y1)
-                else:
-                    (x0, y0) = (x1, y1)
-                print()
+            try:
+                subImgName = namePrefix + "." + str(i + 1) + ext
+                subIm.save(subImgName, quality=defaultQuality)
+            except SystemError:
+                sys.stderr.write("Error: can't save the split image\n");
+                raise
+            (x0, y0) = (x1, y1)
+            print()
 
         # 나머지 부분 저장
         print("last cutting point=", (width, height))
         subIm = im.crop((x0, y0, width, height))
-        if doIgnoreTooThinAndUniformSlice:
-            doSave = checkProportionAndUniformity(subIm)
+        if doIgnoreTooThinSlice:
+            doSave = checkProportion(subIm, unitWidth, orientation)
         else:
             doSave = True
         if doSave:
-            subIm.save(namePrefix + "." + str(i + 1) + ext, quality=defaultQuality)
+            subImgName = namePrefix + "." + str(i + 1) + ext
+            subIm.save(subImgName, quality=defaultQuality)
 
         
 if __name__ == "__main__":
