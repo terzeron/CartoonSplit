@@ -7,31 +7,43 @@ width=21472, height=760
 orientation= horizontal
 unitWidth= 4278
 bgcolor= (255, 255, 255)
+
 i=0, numUnits=5
 (x0, y0)= (0, 0)
 (x1, y1)= (4298, 0)
+findBgcolorBand(bgcolor=(255, 255, 255), orientation=horizontal, bandWidth=20, x1=4298, y1=0, diffThreshold=0.050000, isFuzzy=False)
 cutting point= (4414, 0)
 crop: x0=0, y0=0, x1=4414, height=760
+save: horizontal.1.jpg
 
 i=1, numUnits=5
 (x0, y0)= (4414, 0)
 (x1, y1)= (8692, 0)
+findBgcolorBand(bgcolor=(255, 255, 255), orientation=horizontal, bandWidth=20, x1=8692, y1=0, diffThreshold=0.050000, isFuzzy=False)
 cutting point= (8832, 0)
 crop: x0=4414, y0=0, x1=8832, height=760
+save: horizontal.2.jpg
 
 i=2, numUnits=5
 (x0, y0)= (8832, 0)
 (x1, y1)= (13110, 0)
+findBgcolorBand(bgcolor=(255, 255, 255), orientation=horizontal, bandWidth=20, x1=13110, y1=0, diffThreshold=0.050000, isFuzzy=False)
 cutting point= (13620, 0)
 crop: x0=8832, y0=0, x1=13620, height=760
+save: horizontal.3.jpg
 
 i=3, numUnits=5
 (x0, y0)= (13620, 0)
 (x1, y1)= (17898, 0)
+findBgcolorBand(bgcolor=(255, 255, 255), orientation=horizontal, bandWidth=20, x1=17898, y1=0, diffThreshold=0.050000, isFuzzy=False)
 cutting point= (17948, 0)
 crop: x0=13620, y0=0, x1=17948, height=760
+save: horizontal.4.jpg
 
 i=4, numUnits=5
 (x0, y0)= (17948, 0)
 (x1, y1)= (22226, 0)
 last cutting point= (21472, 760)
+checkProportion(unitWidth/2.0=2139.000000, width=3524.000000, height=0.000000, width/height=0.000000, height/width=0.000000)
+crop: x0=17948, y0=0, width=21472, height=760
+save: horizontal.5.jpg

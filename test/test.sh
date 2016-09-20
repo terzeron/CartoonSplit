@@ -1,9 +1,5 @@
 #!/bin/bash
 
-../split.py -n 2 -b 10 vertical5.jpg #> temp.result
-exit 0
-diff temp.result n5.h2.result > /dev/null 2>&1 || (echo "n5.h2 failure"; exit -1)
-
 ../split.py -n 5 vertical.jpg > temp.result
 diff temp.result n5.v.result > /dev/null 2>&1 || (echo "n5.v failure"; exit -1)
 ../split.py -n 4 vertical.jpg > temp.result
@@ -41,10 +37,12 @@ diff temp.result n25.v3f.result > /dev/null 2>&1 || (echo "n25.v3f failure"; exi
 diff temp.result n25.v4f.result > /dev/null 2>&1 || (echo "n25.v4f failure"; exit -1)
 
 # 첫번째 슬라이스가 너무 얇아서 쪼개지지 않는 케이스
-../split.py -n 2 -b 10 vertical5.jpg
+../split.py -n 2 -b 10 vertical5.jpg > temp.result
+diff temp.result n2.v5.result > /dev/null 2>&1 || (echo "n25.v2bw failure"; exit -1)
 
 # 마지막 슬라이스가 너무 얇아서 이전 이미지에 붙여서 같은 이름으로 다시 저장해야 하는 케이스
-../split.py -n 3 -b 10 vertical6.jpg
+../split.py -n 3 -b 10 vertical6.jpg > temp.result
+diff temp.result n3.v6.result > /dev/null 2>&1 || (echo "n25.v2bw failure"; exit -1)
 
 echo "success"
 rm -f temp.result vertical*.*.jpg horizontal*.*.jpg

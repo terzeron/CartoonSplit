@@ -311,15 +311,6 @@ def main():
                 break
 
             subImgName = namePrefix + "." + str(i + 1) + ext
-            isTooThin = checkProportion(x1 - x0, y1 - y0, unitWidth, orientation)
-            if isTooThin:
-                if i == 0:
-                    print("too thin slice - merge with next")
-                    continue
-                else:
-                    print("too thin slice - merge with previous")
-                    subImgName = namePrefix + "." + str(i) + ext
-                    (x0, y0) = (prev_x0, prev_y0)
                     
             # 잘라서 저장
             if orientation == "horizontal":
@@ -346,6 +337,8 @@ def main():
             (x1, y1) = (0, height)
 
         subImgName = namePrefix + "." + str(i + 1) + ext
+
+        # 마지막 남은 조각의 경우, 너무 얇다면 이전 조각에 붙여서 다시 저장
         isTooThin = checkProportion(x1 - x0, y1 - y0, unitWidth, orientation)
         if isTooThin:
             print("too thin slice - merge with previous")
