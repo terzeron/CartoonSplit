@@ -141,7 +141,7 @@ def checkVerticalBand(im, x1, y1, bandWidth, bgcolor, margin, diffThreshold, isF
 
 
 def findBgcolorBand(im, bgcolor, orientation, bandWidth, x1, y1, margin, diffThreshold, isFuzzy):
-    #print "findBgcolorBand(orientation=%s)" % orientation
+    print("findBgcolorBand(bgcolor=%s, orientation=%s, bandWidth=%d, x1=%d, y1=%d, diffThreshold=%f, isFuzzy=%s)" % (bgcolor, orientation, bandWidth, x1, y1, diffThreshold, isFuzzy))
     (width, height) = im.size
     if orientation == "vertical":
         # 세로 이미지인 경우
@@ -187,15 +187,15 @@ def determineColorOption(a):
     return (bgcolor, isFuzzy, doUseDominantColor)
 
 
-def checkProportion(width, height, unitWidth, orientation, stat):
-    print("unitWidth/2.0=%f, width=%f, height=%f, width/height=%f, height/width=%f" % ((unitWidth/2.0), width, height, (width/height), (height/width)))
+def checkProportion(width, height, unitWidth, orientation):
+    print("checkProportion(unitWidth/2.0=%f, width=%f, height=%f, width/height=%f, height/width=%f)" % ((unitWidth/2.0), width, height, (width/height) if height != 0 else 0, (height/width) if width != 0 else 0))
     if orientation == "horizontal":
         if width < float(unitWidth / 2.0):
-            return False
+            return True
     else:
         if height < float(unitWidth / 2.0):
-            return False
-    return True
+            return True
+    return False
 
 
 def printUsage():
@@ -289,9 +289,10 @@ def main():
     print("bgcolor=", bgcolor)
         
     (x0, y0) = (0, 0)
+    (prev_x0, prev_y0) = (x0, y0)
     if numUnits > 1:
         for i in range(0, numUnits):
-            print("i=%d, numUnits=%d" % (i, numUnits))
+            print("\ni=%d, numUnits=%d" % (i, numUnits))
             if orientation == "horizontal":
                 #(x1, y1) = (((i + 1) * width - bandWidth * (numUnits - 1)) / numUnits, y0)
                 (x1, y1) = (int(max((unitWidth + bandWidth) * (i + 1), x0 + unitWidth)), y0)
@@ -309,16 +310,17 @@ def main():
                 sys.stderr.write("Warning: no splitting\n")
                 break
 
-            if doIgnoreTooThinSlice:
-                # 너무 가느다란 조각인지 확인
-                doSaveNewSubImg = checkProportion(x1 - x0, y1 - y0, unitWidth, orientation)
-            else:
-                doSaveNewSubImg = True
-            if not doSaveNewSubImg:
-                # 맨 왼쪽이면 다음 조각에 붙이고
-                # 가운데 조각이면 아무데나 붙이고
-                # 맨 오른쪽이면 이전 조각에 붙임
-                
+            subImgName = namePrefix + "." + str(i + 1) + ext
+            isTooThin = checkProportion(x1 - x0, y1 - y0, unitWidth, orientation)
+            if isTooThin:
+                if i == 0:
+                    print("too thin slice - merge with next")
+                    continue
+                else:
+                    print("too thin slice - merge with previous")
+                    subImgName = namePrefix + "." + str(i) + ext
+                    (x0, y0) = (prev_x0, prev_y0)
+                    
             # 잘라서 저장
             if orientation == "horizontal":
                 print("crop: x0=%d, y0=%d, x1=%d, height=%d" % (x0, y0, x1, height))
@@ -328,24 +330,36 @@ def main():
                 subIm = im.crop((x0, y0, width, y1))
 
             try:
-                subImgName = namePrefix + "." + str(i + 1) + ext
                 subIm.save(subImgName, quality=defaultQuality)
+                print("save: " + subImgName)
             except SystemError:
-                sys.stderr.write("Error: can't save the split image\n");
+                sys.stderr.write("Error: can't save the split image\n")
                 raise
+            (prev_x0, prev_y0) = (x0, y0)
             (x0, y0) = (x1, y1)
-            print()
 
         # 나머지 부분 저장
         print("last cutting point=", (width, height))
-        subIm = im.crop((x0, y0, width, height))
-        if doIgnoreTooThinSlice:
-            doSave = checkProportion(subIm, unitWidth, orientation)
+        if orientation == "horizontal":
+            (x1, y1) = (width, 0)
         else:
-            doSave = True
-        if doSave:
-            subImgName = namePrefix + "." + str(i + 1) + ext
+            (x1, y1) = (0, height)
+
+        subImgName = namePrefix + "." + str(i + 1) + ext
+        isTooThin = checkProportion(x1 - x0, y1 - y0, unitWidth, orientation)
+        if isTooThin:
+            print("too thin slice - merge with previous")
+            subImgName = namePrefix + "." + str(i) + ext
+            (x0, y0) = (prev_x0, prev_y0)
+
+        print("crop: x0=%d, y0=%d, width=%d, height=%d" % (x0, y0, width, height))
+        subIm = im.crop((x0, y0, width, height))
+        try:
             subIm.save(subImgName, quality=defaultQuality)
+            print("save: " + subImgName)
+        except SystemError:
+            sys.stderr.write("Error: can't save the split image\n")
+            raise
 
         
 if __name__ == "__main__":
