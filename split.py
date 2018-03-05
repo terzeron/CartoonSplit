@@ -307,7 +307,7 @@ def main():
             (x1, y1) = findBgcolorBand(im, bgcolor, orientation, bandWidth, x1, y1, margin, diffThreshold, isFuzzy)
             print("cutting point=", (x1, y1))
             if (x1, y1) == (-1, -1):
-                sys.stderr.write("Warning: no splitting\n")
+                print("Warning: no splitting")
                 break
 
             subImgName = namePrefix + "." + str(i + 1) + ext
