@@ -13,6 +13,7 @@ defaultBandWith = 20 # 자르는 기준이 되는 띠의 두께
 defaultNumUnits = 1 # 1/n로 자를 때의 n의 갯수
 defaultMargin = 0 # 이미지 가장자리 제외하는 여유공간의 크기
 defaultDiffThreshold = 0.05 # 5%
+defaultSizeThreshold = 0 # 0 pixel
 defaultQuality = 90
 
 
@@ -199,15 +200,16 @@ def checkProportion(width, height, unitWidth, orientation):
 
 
 def printUsage():
-    print("Usage: %s -n #unit [-b bandwidth] [-m margin] [-c bgcolor] [-t threshold] [-v] [-i] imagefile" % (sys.argv[0]))
-    print("\t-n #unit: more than 2")
-    print("\t-b bandwidth (default %d)" % (defaultBandWith))
-    print("\t-m margin (default %d)" % (defaultMargin))
-    print("\t-c bgcolor: 'white' or 'black', 'blackorwhite', 'dominant', 'fuzzy', '#135fd8', ...")
+    print("Usage: %s -n #unit [-b <bandwidth>] [-m <margin>] [-c <bgcolor or method>] [-t <diff threshold>] [-v] [-i] <image file>" % (sys.argv[0]))
+    print("\t-n <num units>: more than 2")
+    print("\t-b <bandwidth>: (default %d)" % (defaultBandWith))
+    print("\t-m <margin>: (default %d)" % (defaultMargin))
+    print("\t-c <bgcolor or method>: 'white' or 'black', 'blackorwhite', 'dominant', 'fuzzy', '#135fd8', ...")
     print("\t\tblackorwhite: black or white")
     print("\t\tdominant: most dominant color (automatic)")
     print("\t\tfuzzy: either black, white or prevailing color (automatic)")
-    print("\t-t threshold: diff threshold (default %f)" % (defaultDiffThreshold))
+    print("\t-t <diff threshold>: diff threshold (default %f)" % (defaultDiffThreshold))
+    print("\t-s <size threshold>: size threshold (default %d)" % (defaultSizeThreshold))
     print("\t-v: split vertically")
     print("\t-i: ignore too thin slice (without saving)")
     
@@ -218,13 +220,14 @@ def main():
     numUnits = defaultNumUnits
     margin = defaultMargin
     diffThreshold = defaultDiffThreshold;
+    sizeThreshold = defaultSizeThreshold;
     bgcolor = None
     doUseDominantColor = False
     isFuzzy = False
     doSplitVertically = False
     doIgnoreTooThinSlice = False
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hb:n:m:c:t:vi")
+        opts, args = getopt.getopt(sys.argv[1:], "hb:n:m:c:t:s:vi")
     except getopt.GetoptError as err:
         printUsage()
         sys.stderr.write("Error: Invaild option definition\n")
@@ -248,6 +251,8 @@ def main():
             (bgcolor, isFuzzy, doUseDominantColor) = colorOption
         elif o == "-t":
             diffThreshold = float(a)
+        elif o == "-s":
+            sizeThreshold = int(a)
         elif o == "-v":
             doSplitVertically = True
         elif o == "-i":
@@ -265,6 +270,7 @@ def main():
     print("numUnits=", numUnits)
     print("margin=", margin)
     print("diffThreshold=", diffThreshold)
+    print("sizeThreshold=", sizeThreshold)
     print("arg=", args[0])
 
     im = Image.open(imageFile)
@@ -287,6 +293,14 @@ def main():
     if bgcolor == None:
         bgcolor = determineBgcolor(im, 10)
     print("bgcolor=", bgcolor)
+
+    # size threshold check
+    if orientation == "horizontal":
+        if width <= sizeThreshold:
+            return -1
+    else:
+        if height <= sizeThreshold:
+            return -1
         
     (x0, y0) = (0, 0)
     (prev_x0, prev_y0) = (x0, y0)
@@ -294,10 +308,8 @@ def main():
         for i in range(0, numUnits):
             print("\ni=%d, numUnits=%d" % (i, numUnits))
             if orientation == "horizontal":
-                #(x1, y1) = (((i + 1) * width - bandWidth * (numUnits - 1)) / numUnits, y0)
                 (x1, y1) = (int(max((unitWidth + bandWidth) * (i + 1), x0 + unitWidth)), y0)
             else:
-                #(x1, y1) = (x0, ((i + 1) * height - bandWidth * (numUnits - 1)) / numUnits)
                 (x1, y1) = (x0, int(max((unitWidth + bandWidth) * (i + 1), y0 + unitWidth)))
             print("(x0, y0)=", (x0, y0))
             print("(x1, y1)=", (x1, y1))
@@ -325,7 +337,7 @@ def main():
                 print("save: " + subImgName)
             except SystemError:
                 sys.stderr.write("Error: can't save the split image\n")
-                raise
+                return -1
             (prev_x0, prev_y0) = (x0, y0)
             (x0, y0) = (x1, y1)
 
@@ -352,8 +364,10 @@ def main():
             print("save: " + subImgName)
         except SystemError:
             sys.stderr.write("Error: can't save the split image\n")
-            raise
+            return -1
+        
+    return 0
 
         
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
