@@ -9,79 +9,79 @@ import operator
 from math import pow, sqrt
 
 
-defaultBandWith = 20 # 자르는 기준이 되는 띠의 두께
-defaultNumUnits = 1 # 1/n로 자를 때의 n의 갯수
-defaultMargin = 0 # 이미지 가장자리 제외하는 여유공간의 크기
-defaultDiffThreshold = 0.05 # 5%
-defaultSizeThreshold = 0 # 0 pixel
-defaultQuality = 90
+default_bandwidth = 20 # 자르는 기준이 되는 띠의 두께
+default_num_units = 1 # 1/n로 자를 때의 n의 갯수
+default_margin = 0 # 이미지 가장자리 제외하는 여유공간의 크기
+default_diff_threshold = 0.05 # 5%
+default_size_threshold = 0 # 0 pixel
+default_quality = 90
 
 
-def sumupPixelsInBox(im, sumPixel, pixelCount, x1, y1, bandWidth):
-    for i in range(x1, x1 + bandWidth):
-        for j in range(y1, y1 + bandWidth):
+def sumup_pixels_in_box(im, sum_pixel, pixel_count, x1, y1, bandwidth):
+    for i in range(x1, x1 + bandwidth):
+        for j in range(y1, y1 + bandwidth):
             pixel = im.getpixel((i, j))
-            sumPixel[0] += pixel[0]
-            sumPixel[1] += pixel[1]
-            sumPixel[2] += pixel[2]
-            pixelCount += 1
-            return (sumPixel, pixelCount)
+            sum_pixel[0] += pixel[0]
+            sum_pixel[1] += pixel[1]
+            sum_pixel[2] += pixel[2]
+            pixel_count += 1
+            return (sum_pixel, pixel_count)
         
 
-def determineBgcolor(im, bandWidth):
+def determine_bgcolor(im, bandwidth):
     (width, height) = im.size
-    sumPixel = [0, 0, 0]
-    pixelCount = 0
-    (sumPixel, pixelCount) = sumupPixelsInBox(im, sumPixel, pixelCount, 0, 0, bandWidth)
-    (sumPixel, pixelCount) = sumupPixelsInBox(im, sumPixel, pixelCount, width - bandWidth, 0, bandWidth)
-    (sumPixel, pixelCount) = sumupPixelsInBox(im, sumPixel, pixelCount, 0, height - bandWidth, bandWidth)
-    (sumPixel, pixelCount) = sumupPixelsInBox(im, sumPixel, pixelCount, width - bandWidth, height - bandWidth, bandWidth)
-    return (int(sumPixel[0] / pixelCount), int(sumPixel[1] / pixelCount), int(sumPixel[2] / pixelCount))
+    sum_pixel = [0, 0, 0]
+    pixel_count = 0
+    (sum_pixel, pixel_count) = sumup_pixels_in_box(im, sum_pixel, pixel_count, 0, 0, bandwidth)
+    (sum_pixel, pixel_count) = sumup_pixels_in_box(im, sum_pixel, pixel_count, width - bandwidth, 0, bandwidth)
+    (sum_pixel, pixel_count) = sumup_pixels_in_box(im, sum_pixel, pixel_count, 0, height - bandwidth, bandwidth)
+    (sum_pixel, pixel_count) = sumup_pixels_in_box(im, sum_pixel, pixel_count, width - bandwidth, height - bandwidth, bandwidth)
+    return (int(sum_pixel[0] / pixel_count), int(sum_pixel[1] / pixel_count), int(sum_pixel[2] / pixel_count))
 
 
-def determineDominantColor(im):
+def determine_dominant_color(im):
     (width, height) = im.size
-    colorCounter = {}
+    color_counter = {}
     for i in range(0, width, max(int(width / 100), 1)):
         for j in range(0, height, max(int(height / 100), 1)):
             color = im.getpixel((i, j))
-            if color in colorCounter:
-                colorCounter[color] = colorCounter[color] + 1
+            if color in color_counter:
+                color_counter[color] = color_counter[color] + 1
             else:
-                colorCounter[color] = 1
-                sortedCounter = sorted(iter(colorCounter.items()), key=operator.itemgetter(1))
-    return sortedCounter[-1][0]
+                color_counter[color] = 1
+                sorted_counter = sorted(iter(color_counter.items()), key=operator.itemgetter(1))
+    return sorted_counter[-1][0]
 
 
-def getEuclideanDistance(a, b):
+def get_euclidean_distance(a, b):
     return pow(a[0] - b[0], 2) + pow(a[1] - b[1], 2) + pow(a[2] - b[2], 2)
 
 
-def getColorDistance(colorA, colorB, isFuzzy):
-    #print "getColorDistance, a=", colorA, ", b=", colorB
-    colorWhite = (255, 255, 255)
-    colorBlack = (0, 0, 0)
-    if colorB == (-1, -1, -1):
-        shadeOfColorA = (colorA[1] + colorA[1] + colorA[2]) / 3
-        if shadeOfColorA < 128:
-            colorB = colorBlack
+def get_color_distance(color_a, color_b, is_fuzzy):
+    #print "get_color_distance, a=", color_a, ", b=", color_b
+    color_white = (255, 255, 255)
+    color_black = (0, 0, 0)
+    if color_b == (-1, -1, -1):
+        shade_of_color_a = (color_a[1] + color_a[1] + color_a[2]) / 3
+        if shade_of_color_a < 128:
+            color_b = color_black
         else:
-            colorB = colorWhite
-    distance = getEuclideanDistance(colorA, colorB)
-    if isFuzzy == True:
-        distanceWhite = getEuclideanDistance(colorA, colorWhite)
-        distanceBlack = getEuclideanDistance(colorA, colorBlack)
-        distance = min(distanceWhite, distanceBlack, distance)
+            color_b = color_white
+    distance = get_euclidean_distance(color_a, color_b)
+    if is_fuzzy == True:
+        distance_white = get_euclidean_distance(color_a, color_white)
+        distance_black = get_euclidean_distance(color_a, color_black)
+        distance = min(distance_white, distance_black, distance)
     return distance
 
 
-def checkHorizontalBand(im, x1, y1, bandWidth, bgcolor, margin, diffThreshold, isFuzzy):
-    #print "checkHorizontalBand(%d, %d)" % (x1, y1)
+def check_horizontal_band(im, x1, y1, bandwidth, bgcolor, margin, diff_threshold, is_fuzzy):
+    #print "check_horizontal_band(%d, %d)" % (x1, y1)
     (width, height) = im.size
-    for j in range(y1, y1 + bandWidth):
+    for j in range(y1, y1 + bandwidth):
         if j >= height:
             return (False, j - y1 + 1)
-        diffCount = 0
+        diff_count = 0
         for i in range(x1 + margin, x1 + width - margin):
             pixel = im.getpixel((i, j))
             #print (i, j), pixel
@@ -89,32 +89,32 @@ def checkHorizontalBand(im, x1, y1, bandWidth, bgcolor, margin, diffThreshold, i
             if bgcolor == (-1, -1, -1):
                 # blackorwhite
                 if pixel == (0, 0, 0) or pixel == (255, 255, 255):
-                    isSame = 1
+                    is_same = 1
                 else:
-                    isSame = 0
+                    is_same = 0
             else:
                 # specific color
                 if pixel == bgcolor:
-                    isSame = 1
+                    is_same = 1
                 else:
-                    isSame = 0
-            if isSame == 0:
-                if getColorDistance(pixel, bgcolor, isFuzzy) > 3.0:
-                    diffCount += 1
-                    #print "y1=%d, diffCount=%d, convertedThreshold=%f" % (y1, diffCount, (width - 2 * margin) * diffThreshold)
+                    is_same = 0
+            if is_same == 0:
+                if get_color_distance(pixel, bgcolor, is_fuzzy) > 3.0:
+                    diff_count += 1
+                    #print "y1=%d, diff_count=%d, converted_threshold=%f" % (y1, diff_count, (width - 2 * margin) * diff_threshold)
                     # threshold 미만으로 불일치가 존재하면 false 반환
-                    if diffCount > (width - 2 * margin) * diffThreshold:
+                    if diff_count > (width - 2 * margin) * diff_threshold:
                         return (False, j - y1 + 1)
     return (True, 0)
 
 
-def checkVerticalBand(im, x1, y1, bandWidth, bgcolor, margin, diffThreshold, isFuzzy):
-    #print "checkVerticalBand(%d, %d)" % (x1, y1)
+def check_vertical_band(im, x1, y1, bandwidth, bgcolor, margin, diff_threshold, is_fuzzy):
+    #print "check_vertical_band(%d, %d)" % (x1, y1)
     (width, height) = im.size
-    for i in range(x1, x1 + bandWidth):
+    for i in range(x1, x1 + bandwidth):
         if i >= width:
             return (False, i - x1 + 1)
-        diffCount = 0
+        diff_count = 0
         for j in range(y1 + margin, y1 + height - margin):
             pixel = im.getpixel((i, j))
             #print (i, j), pixel
@@ -122,53 +122,53 @@ def checkVerticalBand(im, x1, y1, bandWidth, bgcolor, margin, diffThreshold, isF
             if bgcolor == (-1, -1, -1):
                 # blackorwhite
                 if pixel == (0, 0, 0) or pixel == (255, 255, 255):
-                    isSame = 1
+                    is_same = 1
                 else:
-                    isSame = 0
+                    is_same = 0
             else:
                 # specific color
                 if pixel == bgcolor:
-                    isSame = 1
+                    is_same = 1
                 else:
-                    isSame = 0
-            if isSame == 0:
-                if getColorDistance(pixel, bgcolor, isFuzzy) > 3.0:
-                    diffCount += 1
-                    #print x1, diffCount
+                    is_same = 0
+            if is_same == 0:
+                if get_color_distance(pixel, bgcolor, is_fuzzy) > 3.0:
+                    diff_count += 1
+                    #print x1, diff_count
                     # threshold 미만으로 불일치가 존재하면 false 반환
-                    if diffCount > (height - 2 * margin) * diffThreshold:
+                    if diff_count > (height - 2 * margin) * diff_threshold:
                         return (False, i - x1 + 1)
     return (True, 0)
 
 
-def findBgcolorBand(im, bgcolor, orientation, bandWidth, x1, y1, margin, diffThreshold, isFuzzy):
-    print("findBgcolorBand(bgcolor=%s, orientation=%s, bandWidth=%d, x1=%d, y1=%d, diffThreshold=%f, isFuzzy=%s)" % (bgcolor, orientation, bandWidth, x1, y1, diffThreshold, isFuzzy))
+def find_bgcolor_band(im, bgcolor, orientation, bandwidth, x1, y1, margin, diff_threshold, is_fuzzy):
+    print("find_bgcolor_band(bgcolor=%s, orientation=%s, bandwidth=%d, x1=%d, y1=%d, diff_threshold=%f, is_fuzzy=%s)" % (bgcolor, orientation, bandwidth, x1, y1, diff_threshold, is_fuzzy))
     (width, height) = im.size
     if orientation == "vertical":
         # 세로 이미지인 경우
         i = 0
         while y1 + i < height:
             # 가로 띠가 배경색으로만 구성되었는지 확인
-            (flag, offset) = checkHorizontalBand(im, x1, y1 + i, bandWidth, bgcolor, margin, diffThreshold, isFuzzy)
+            (flag, offset) = check_horizontal_band(im, x1, y1 + i, bandwidth, bgcolor, margin, diff_threshold, is_fuzzy)
             if flag:
-                return (x1, int(y1 + i + bandWidth / 2))
+                return (x1, int(y1 + i + bandwidth / 2))
             i += offset
     elif orientation == "horizontal":
         # 가로 이미지인 경우
         i = 0
         while x1 + i < width:
             # 세로 띠가 배경색으로만 구성되었는지 확인
-            (flag, offset) = checkVerticalBand(im, x1 + i, y1, bandWidth, bgcolor, margin, diffThreshold, isFuzzy)
+            (flag, offset) = check_vertical_band(im, x1 + i, y1, bandwidth, bgcolor, margin, diff_threshold, is_fuzzy)
             if flag:
-                return (int(x1 + i + bandWidth / 2), y1)
+                return (int(x1 + i + bandwidth / 2), y1)
             i += offset
     return (-1, -1)
 
 
-def determineColorOption(a):
+def determine_colorOption(a):
     bgcolor = False
-    doUseDominantColor = False
-    isFuzzy = False
+    doUse_dominant_color = False
+    is_fuzzy = False
     if a == "white":
         bgcolor = (255, 255, 255)
     elif a == "black":
@@ -176,101 +176,101 @@ def determineColorOption(a):
     elif a == "blackorwhite":
         bgcolor = (-1, -1, -1)
     elif a == "dominant":
-        doUseDominantColor = True
+        doUse_dominant_color = True
     elif a == "fuzzy":
-        isFuzzy = True
-        doUseDominantColor = True
+        is_fuzzy = True
+        doUse_dominant_color = True
     elif a[0] == "#":
         colorValue = int(a[1:], 16)
         bgcolor = (int(colorValue / 65536), int((colorValue % 65536) / 256), int(colorValue % 256))
     else:
         return False
-    return (bgcolor, isFuzzy, doUseDominantColor)
+    return (bgcolor, is_fuzzy, doUse_dominant_color)
 
 
-def checkProportion(width, height, unitWidth, orientation):
-    print("checkProportion(unitWidth/2.0=%f, width=%f, height=%f, width/height=%f, height/width=%f)" % ((unitWidth/2.0), width, height, (width/height) if height != 0 else 0, (height/width) if width != 0 else 0))
+def check_proportion(width, height, unit_width, orientation):
+    print("check_proportion(unit_width/2.0=%f, width=%f, height=%f, width/height=%f, height/width=%f)" % ((unit_width/2.0), width, height, (width/height) if height != 0 else 0, (height/width) if width != 0 else 0))
     if orientation == "horizontal":
-        if width < float(unitWidth / 2.0):
+        if width < float(unit_width / 2.0):
             return True
     else:
-        if height < float(unitWidth / 2.0):
+        if height < float(unit_width / 2.0):
             return True
     return False
 
 
-def printUsage():
-    print("Usage: %s -n #unit [-b <bandwidth>] [-m <margin>] [-c <bgcolor or method>] [-t <diff threshold>] [-v] [-i] <image file>" % (sys.argv[0]))
+def print_usage():
+    print("_usage: %s -n #unit [-b <bandwidth>] [-m <margin>] [-c <bgcolor or method>] [-t <diff threshold>] [-v] [-i] <image file>" % (sys.argv[0]))
     print("\t-n <num units>: more than 2")
-    print("\t-b <bandwidth>: (default %d)" % (defaultBandWith))
-    print("\t-m <margin>: (default %d)" % (defaultMargin))
+    print("\t-b <bandwidth>: (default %d)" % (default_bandwidth))
+    print("\t-m <margin>: (default %d)" % (default_margin))
     print("\t-c <bgcolor or method>: 'white' or 'black', 'blackorwhite', 'dominant', 'fuzzy', '#135fd8', ...")
     print("\t\tblackorwhite: black or white")
     print("\t\tdominant: most dominant color (automatic)")
     print("\t\tfuzzy: either black, white or prevailing color (automatic)")
-    print("\t-t <diff threshold>: diff threshold (default %f)" % (defaultDiffThreshold))
-    print("\t-s <size threshold>: size threshold (default %d)" % (defaultSizeThreshold))
+    print("\t-t <diff threshold>: diff threshold (default %f)" % (default_diff_threshold))
+    print("\t-s <size threshold>: size threshold (default %d)" % (default_size_threshold))
     print("\t-v: split vertically")
     print("\t-i: ignore too thin slice (without saving)")
     
             
 def main():
     # 옵션 처리
-    bandWidth = defaultBandWith
-    numUnits = defaultNumUnits
-    margin = defaultMargin
-    diffThreshold = defaultDiffThreshold;
-    sizeThreshold = defaultSizeThreshold;
+    bandwidth = default_bandwidth
+    num_units = default_num_units
+    margin = default_margin
+    diff_threshold = default_diff_threshold;
+    size_threshold = default_size_threshold;
     bgcolor = None
-    doUseDominantColor = False
-    isFuzzy = False
-    doSplitVertically = False
-    doIgnoreTooThinSlice = False
+    do_use_dominant_color = False
+    is_fuzzy = False
+    do_split_vertically = False
+    do_ignore_too_thin_slice = False
     try:
         opts, args = getopt.getopt(sys.argv[1:], "hb:n:m:c:t:s:vi")
     except getopt.GetoptError as err:
-        printUsage()
-        sys.stderr.write("Error: Invaild option definition\n")
+        print_usage()
+        sys.stderr.write("Error: invaild option definition\n")
         sys.exit(-1)
     for o, a in opts:
         if o == "-b":
-            bandWidth = int(a)
+            bandwidth = int(a)
         elif o == "-m":
             margin = int(a)
         elif o == "-n":
-            numUnits = int(a)
-            if numUnits < 2:
-                printUsage()
+            num_units = int(a)
+            if num_units < 2:
+                print_usage()
                 sys.stderr.write("Error: n must be more than 1\n")
                 sys.exit(-1)
         elif o == "-c":
-            colorOption = determineColorOption(a)
+            colorOption = determine_colorOption(a)
             if colorOption == False:
-                printUsage();
+                print_usage();
                 sys.exit(-1)
-            (bgcolor, isFuzzy, doUseDominantColor) = colorOption
+            (bgcolor, is_fuzzy, do_use_dominant_color) = colorOption
         elif o == "-t":
-            diffThreshold = float(a)
+            diff_threshold = float(a)
         elif o == "-s":
-            sizeThreshold = int(a)
+            size_threshold = int(a)
         elif o == "-v":
-            doSplitVertically = True
+            do_split_vertically = True
         elif o == "-i":
-            doIgnoreTooThinSlice = True
+            do_ignore_too_thin_slice = True
         else:
-            printUsage()
+            print_usage()
             sys.exit(-1)
     if len(args) < 1:
-        printUsage()
+        print_usage()
         sys.stderr.write("Error: The image file is not specified\n")
         sys.exit(-1)
     imageFile = args[0]
-    (namePrefix, ext) = os.path.splitext(imageFile)
-    print("bandWidth=", bandWidth)
-    print("numUnits=", numUnits)
+    (name_prefix, ext) = os.path.splitext(imageFile)
+    print("bandwidth=", bandwidth)
+    print("num_units=", num_units)
     print("margin=", margin)
-    print("diffThreshold=", diffThreshold)
-    print("sizeThreshold=", sizeThreshold)
+    print("diff_threshold=", diff_threshold)
+    #print("size_threshold=", size_threshold)
     print("arg=", args[0])
 
     im = Image.open(imageFile)
@@ -278,51 +278,51 @@ def main():
         im = im.convert("RGB")
     (width, height) = im.size
     print("width=%d, height=%d" % (width, height))
-    if width > height or doSplitVertically:
+    if width > height or do_split_vertically:
         orientation = "horizontal"
     else:
         orientation = "vertical"
     print("orientation=", orientation)
     if orientation == "horizontal":
-        unitWidth = int((width - bandWidth * (numUnits - 1)) / numUnits)
+        unit_width = int((width - bandwidth * (num_units - 1)) / num_units)
     else:
-        unitWidth = int((height - bandWidth * (numUnits - 1)) / numUnits)
-    print("unitWidth=", unitWidth)
-    if doUseDominantColor == True:
-        bgcolor = determineDominantColor(im)
+        unit_width = int((height - bandwidth * (num_units - 1)) / num_units)
+    print("unit_width=", unit_width)
+    if do_use_dominant_color == True:
+        bgcolor = determine_dominant_color(im)
     if bgcolor == None:
-        bgcolor = determineBgcolor(im, 10)
+        bgcolor = determine_bgcolor(im, 10)
     print("bgcolor=", bgcolor)
 
     # size threshold check
     if orientation == "horizontal":
-        if width <= sizeThreshold:
+        if width <= size_threshold:
             return -1
     else:
-        if height <= sizeThreshold:
+        if height <= size_threshold:
             return -1
         
     (x0, y0) = (0, 0)
     (prev_x0, prev_y0) = (x0, y0)
-    if numUnits > 1:
-        for i in range(0, numUnits):
-            print("\ni=%d, numUnits=%d" % (i, numUnits))
+    if num_units > 1:
+        for i in range(0, num_units):
+            print("\ni=%d, num_units=%d" % (i, num_units))
             if orientation == "horizontal":
-                (x1, y1) = (int(max((unitWidth + bandWidth) * (i + 1), x0 + unitWidth)), y0)
+                (x1, y1) = (int(max((unit_width + bandwidth) * (i + 1), x0 + unit_width)), y0)
             else:
-                (x1, y1) = (x0, int(max((unitWidth + bandWidth) * (i + 1), y0 + unitWidth)))
+                (x1, y1) = (x0, int(max((unit_width + bandwidth) * (i + 1), y0 + unit_width)))
             print("(x0, y0)=", (x0, y0))
             print("(x1, y1)=", (x1, y1))
-            if x0 >= width - bandWidth or y0 >= height - bandWidth or x1 >= width - bandWidth or y1 >= height - bandWidth:
+            if x0 >= width - bandwidth or y0 >= height - bandwidth or x1 >= width - bandwidth or y1 >= height - bandwidth:
                 break
             # 배경색으로만 구성된 띠를 찾아냄
-            (x1, y1) = findBgcolorBand(im, bgcolor, orientation, bandWidth, x1, y1, margin, diffThreshold, isFuzzy)
+            (x1, y1) = find_bgcolor_band(im, bgcolor, orientation, bandwidth, x1, y1, margin, diff_threshold, is_fuzzy)
             print("cutting point=", (x1, y1))
             if (x1, y1) == (-1, -1):
                 print("Warning: no splitting")
                 break
 
-            subImgName = namePrefix + "." + str(i + 1) + ext
+            sub_img_name = name_prefix + "." + str(i + 1) + ext
                     
             # 잘라서 저장
             if orientation == "horizontal":
@@ -333,8 +333,8 @@ def main():
                 subIm = im.crop((x0, y0, width, y1))
 
             try:
-                subIm.save(subImgName, quality=defaultQuality)
-                print("save: " + subImgName)
+                subIm.save(sub_img_name, quality=default_quality)
+                print("save: " + sub_img_name)
             except SystemError:
                 sys.stderr.write("Error: can't save the split image\n")
                 return -1
@@ -348,20 +348,20 @@ def main():
         else:
             (x1, y1) = (0, height)
 
-        subImgName = namePrefix + "." + str(i + 1) + ext
+        sub_img_name = name_prefix + "." + str(i + 1) + ext
 
         # 마지막 남은 조각의 경우, 너무 얇다면 이전 조각에 붙여서 다시 저장
-        isTooThin = checkProportion(x1 - x0, y1 - y0, unitWidth, orientation)
-        if isTooThin:
+        is_too_thin = check_proportion(x1 - x0, y1 - y0, unit_width, orientation)
+        if is_too_thin:
             print("too thin slice - merge with previous")
-            subImgName = namePrefix + "." + str(i) + ext
+            sub_img_name = name_prefix + "." + str(i) + ext
             (x0, y0) = (prev_x0, prev_y0)
 
         print("crop: x0=%d, y0=%d, width=%d, height=%d" % (x0, y0, width, height))
         subIm = im.crop((x0, y0, width, height))
         try:
-            subIm.save(subImgName, quality=defaultQuality)
-            print("save: " + subImgName)
+            subIm.save(sub_img_name, quality=default_quality)
+            print("save: " + sub_img_name)
         except SystemError:
             sys.stderr.write("Error: can't save the split image\n")
             return -1

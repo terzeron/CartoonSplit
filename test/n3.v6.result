@@ -1,34 +1,34 @@
-bandWidth= 10
-numUnits= 3
+bandwidth= 10
+num_units= 3
 margin= 0
-diffThreshold= 0.05
+diff_threshold= 0.05
 arg= vertical6.jpg
 width=687, height=2259
 orientation= vertical
-unitWidth= 746
+unit_width= 746
 bgcolor= (255, 255, 255)
 
-i=0, numUnits=3
+i=0, num_units=3
 (x0, y0)= (0, 0)
 (x1, y1)= (0, 756)
-findBgcolorBand(bgcolor=(255, 255, 255), orientation=vertical, bandWidth=10, x1=0, y1=756, diffThreshold=0.050000, isFuzzy=False)
+find_bgcolor_band(bgcolor=(255, 255, 255), orientation=vertical, bandwidth=10, x1=0, y1=756, diff_threshold=0.050000, is_fuzzy=False)
 cutting point= (0, 1085)
 crop: x0=0, y0=0, width=687, y1=1085
 save: vertical6.1.jpg
 
-i=1, numUnits=3
+i=1, num_units=3
 (x0, y0)= (0, 1085)
 (x1, y1)= (0, 1831)
-findBgcolorBand(bgcolor=(255, 255, 255), orientation=vertical, bandWidth=10, x1=0, y1=1831, diffThreshold=0.050000, isFuzzy=False)
+find_bgcolor_band(bgcolor=(255, 255, 255), orientation=vertical, bandwidth=10, x1=0, y1=1831, diff_threshold=0.050000, is_fuzzy=False)
 cutting point= (0, 2163)
 crop: x0=0, y0=1085, width=687, y1=2163
 save: vertical6.2.jpg
 
-i=2, numUnits=3
+i=2, num_units=3
 (x0, y0)= (0, 2163)
 (x1, y1)= (0, 2909)
 last cutting point= (687, 2259)
-checkProportion(unitWidth/2.0=373.000000, width=0.000000, height=96.000000, width/height=0.000000, height/width=0.000000)
+check_proportion(unit_width/2.0=373.000000, width=0.000000, height=96.000000, width/height=0.000000, height/width=0.000000)
 too thin slice - merge with previous
 crop: x0=0, y0=1085, width=687, height=2259
 save: vertical6.2.jpg

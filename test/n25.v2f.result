@@ -1,194 +1,194 @@
-bandWidth= 10
-numUnits= 25
+bandwidth= 10
+num_units= 25
 margin= 0
-diffThreshold= 0.05
+diff_threshold= 0.05
 arg= vertical2.jpg
 width=650, height=25700
 orientation= vertical
-unitWidth= 1018
+unit_width= 1018
 bgcolor= (255, 255, 255)
 
-i=0, numUnits=25
+i=0, num_units=25
 (x0, y0)= (0, 0)
 (x1, y1)= (0, 1028)
-findBgcolorBand(bgcolor=(255, 255, 255), orientation=vertical, bandWidth=10, x1=0, y1=1028, diffThreshold=0.050000, isFuzzy=True)
+find_bgcolor_band(bgcolor=(255, 255, 255), orientation=vertical, bandwidth=10, x1=0, y1=1028, diff_threshold=0.050000, is_fuzzy=True)
 cutting point= (0, 1340)
 crop: x0=0, y0=0, width=650, y1=1340
 save: vertical2.1.jpg
 
-i=1, numUnits=25
+i=1, num_units=25
 (x0, y0)= (0, 1340)
 (x1, y1)= (0, 2358)
-findBgcolorBand(bgcolor=(255, 255, 255), orientation=vertical, bandWidth=10, x1=0, y1=2358, diffThreshold=0.050000, isFuzzy=True)
+find_bgcolor_band(bgcolor=(255, 255, 255), orientation=vertical, bandwidth=10, x1=0, y1=2358, diff_threshold=0.050000, is_fuzzy=True)
 cutting point= (0, 2527)
 crop: x0=0, y0=1340, width=650, y1=2527
 save: vertical2.2.jpg
 
-i=2, numUnits=25
+i=2, num_units=25
 (x0, y0)= (0, 2527)
 (x1, y1)= (0, 3545)
-findBgcolorBand(bgcolor=(255, 255, 255), orientation=vertical, bandWidth=10, x1=0, y1=3545, diffThreshold=0.050000, isFuzzy=True)
+find_bgcolor_band(bgcolor=(255, 255, 255), orientation=vertical, bandwidth=10, x1=0, y1=3545, diff_threshold=0.050000, is_fuzzy=True)
 cutting point= (0, 3675)
 crop: x0=0, y0=2527, width=650, y1=3675
 save: vertical2.3.jpg
 
-i=3, numUnits=25
+i=3, num_units=25
 (x0, y0)= (0, 3675)
 (x1, y1)= (0, 4693)
-findBgcolorBand(bgcolor=(255, 255, 255), orientation=vertical, bandWidth=10, x1=0, y1=4693, diffThreshold=0.050000, isFuzzy=True)
+find_bgcolor_band(bgcolor=(255, 255, 255), orientation=vertical, bandwidth=10, x1=0, y1=4693, diff_threshold=0.050000, is_fuzzy=True)
 cutting point= (0, 4698)
 crop: x0=0, y0=3675, width=650, y1=4698
 save: vertical2.4.jpg
 
-i=4, numUnits=25
+i=4, num_units=25
 (x0, y0)= (0, 4698)
 (x1, y1)= (0, 5716)
-findBgcolorBand(bgcolor=(255, 255, 255), orientation=vertical, bandWidth=10, x1=0, y1=5716, diffThreshold=0.050000, isFuzzy=True)
+find_bgcolor_band(bgcolor=(255, 255, 255), orientation=vertical, bandwidth=10, x1=0, y1=5716, diff_threshold=0.050000, is_fuzzy=True)
 cutting point= (0, 5989)
 crop: x0=0, y0=4698, width=650, y1=5989
 save: vertical2.5.jpg
 
-i=5, numUnits=25
+i=5, num_units=25
 (x0, y0)= (0, 5989)
 (x1, y1)= (0, 7007)
-findBgcolorBand(bgcolor=(255, 255, 255), orientation=vertical, bandWidth=10, x1=0, y1=7007, diffThreshold=0.050000, isFuzzy=True)
+find_bgcolor_band(bgcolor=(255, 255, 255), orientation=vertical, bandwidth=10, x1=0, y1=7007, diff_threshold=0.050000, is_fuzzy=True)
 cutting point= (0, 7161)
 crop: x0=0, y0=5989, width=650, y1=7161
 save: vertical2.6.jpg
 
-i=6, numUnits=25
+i=6, num_units=25
 (x0, y0)= (0, 7161)
 (x1, y1)= (0, 8179)
-findBgcolorBand(bgcolor=(255, 255, 255), orientation=vertical, bandWidth=10, x1=0, y1=8179, diffThreshold=0.050000, isFuzzy=True)
+find_bgcolor_band(bgcolor=(255, 255, 255), orientation=vertical, bandwidth=10, x1=0, y1=8179, diff_threshold=0.050000, is_fuzzy=True)
 cutting point= (0, 8347)
 crop: x0=0, y0=7161, width=650, y1=8347
 save: vertical2.7.jpg
 
-i=7, numUnits=25
+i=7, num_units=25
 (x0, y0)= (0, 8347)
 (x1, y1)= (0, 9365)
-findBgcolorBand(bgcolor=(255, 255, 255), orientation=vertical, bandWidth=10, x1=0, y1=9365, diffThreshold=0.050000, isFuzzy=True)
+find_bgcolor_band(bgcolor=(255, 255, 255), orientation=vertical, bandwidth=10, x1=0, y1=9365, diff_threshold=0.050000, is_fuzzy=True)
 cutting point= (0, 9477)
 crop: x0=0, y0=8347, width=650, y1=9477
 save: vertical2.8.jpg
 
-i=8, numUnits=25
+i=8, num_units=25
 (x0, y0)= (0, 9477)
 (x1, y1)= (0, 10495)
-findBgcolorBand(bgcolor=(255, 255, 255), orientation=vertical, bandWidth=10, x1=0, y1=10495, diffThreshold=0.050000, isFuzzy=True)
+find_bgcolor_band(bgcolor=(255, 255, 255), orientation=vertical, bandwidth=10, x1=0, y1=10495, diff_threshold=0.050000, is_fuzzy=True)
 cutting point= (0, 10500)
 crop: x0=0, y0=9477, width=650, y1=10500
 save: vertical2.9.jpg
 
-i=9, numUnits=25
+i=9, num_units=25
 (x0, y0)= (0, 10500)
 (x1, y1)= (0, 11518)
-findBgcolorBand(bgcolor=(255, 255, 255), orientation=vertical, bandWidth=10, x1=0, y1=11518, diffThreshold=0.050000, isFuzzy=True)
+find_bgcolor_band(bgcolor=(255, 255, 255), orientation=vertical, bandwidth=10, x1=0, y1=11518, diff_threshold=0.050000, is_fuzzy=True)
 cutting point= (0, 11577)
 crop: x0=0, y0=10500, width=650, y1=11577
 save: vertical2.10.jpg
 
-i=10, numUnits=25
+i=10, num_units=25
 (x0, y0)= (0, 11577)
 (x1, y1)= (0, 12595)
-findBgcolorBand(bgcolor=(255, 255, 255), orientation=vertical, bandWidth=10, x1=0, y1=12595, diffThreshold=0.050000, isFuzzy=True)
+find_bgcolor_band(bgcolor=(255, 255, 255), orientation=vertical, bandwidth=10, x1=0, y1=12595, diff_threshold=0.050000, is_fuzzy=True)
 cutting point= (0, 12600)
 crop: x0=0, y0=11577, width=650, y1=12600
 save: vertical2.11.jpg
 
-i=11, numUnits=25
+i=11, num_units=25
 (x0, y0)= (0, 12600)
 (x1, y1)= (0, 13618)
-findBgcolorBand(bgcolor=(255, 255, 255), orientation=vertical, bandWidth=10, x1=0, y1=13618, diffThreshold=0.050000, isFuzzy=True)
+find_bgcolor_band(bgcolor=(255, 255, 255), orientation=vertical, bandwidth=10, x1=0, y1=13618, diff_threshold=0.050000, is_fuzzy=True)
 cutting point= (0, 13623)
 crop: x0=0, y0=12600, width=650, y1=13623
 save: vertical2.12.jpg
 
-i=12, numUnits=25
+i=12, num_units=25
 (x0, y0)= (0, 13623)
 (x1, y1)= (0, 14641)
-findBgcolorBand(bgcolor=(255, 255, 255), orientation=vertical, bandWidth=10, x1=0, y1=14641, diffThreshold=0.050000, isFuzzy=True)
+find_bgcolor_band(bgcolor=(255, 255, 255), orientation=vertical, bandwidth=10, x1=0, y1=14641, diff_threshold=0.050000, is_fuzzy=True)
 cutting point= (0, 14646)
 crop: x0=0, y0=13623, width=650, y1=14646
 save: vertical2.13.jpg
 
-i=13, numUnits=25
+i=13, num_units=25
 (x0, y0)= (0, 14646)
 (x1, y1)= (0, 15664)
-findBgcolorBand(bgcolor=(255, 255, 255), orientation=vertical, bandWidth=10, x1=0, y1=15664, diffThreshold=0.050000, isFuzzy=True)
+find_bgcolor_band(bgcolor=(255, 255, 255), orientation=vertical, bandwidth=10, x1=0, y1=15664, diff_threshold=0.050000, is_fuzzy=True)
 cutting point= (0, 15669)
 crop: x0=0, y0=14646, width=650, y1=15669
 save: vertical2.14.jpg
 
-i=14, numUnits=25
+i=14, num_units=25
 (x0, y0)= (0, 15669)
 (x1, y1)= (0, 16687)
-findBgcolorBand(bgcolor=(255, 255, 255), orientation=vertical, bandWidth=10, x1=0, y1=16687, diffThreshold=0.050000, isFuzzy=True)
+find_bgcolor_band(bgcolor=(255, 255, 255), orientation=vertical, bandwidth=10, x1=0, y1=16687, diff_threshold=0.050000, is_fuzzy=True)
 cutting point= (0, 16692)
 crop: x0=0, y0=15669, width=650, y1=16692
 save: vertical2.15.jpg
 
-i=15, numUnits=25
+i=15, num_units=25
 (x0, y0)= (0, 16692)
 (x1, y1)= (0, 17710)
-findBgcolorBand(bgcolor=(255, 255, 255), orientation=vertical, bandWidth=10, x1=0, y1=17710, diffThreshold=0.050000, isFuzzy=True)
+find_bgcolor_band(bgcolor=(255, 255, 255), orientation=vertical, bandwidth=10, x1=0, y1=17710, diff_threshold=0.050000, is_fuzzy=True)
 cutting point= (0, 18462)
 crop: x0=0, y0=16692, width=650, y1=18462
 save: vertical2.16.jpg
 
-i=16, numUnits=25
+i=16, num_units=25
 (x0, y0)= (0, 18462)
 (x1, y1)= (0, 19480)
-findBgcolorBand(bgcolor=(255, 255, 255), orientation=vertical, bandWidth=10, x1=0, y1=19480, diffThreshold=0.050000, isFuzzy=True)
+find_bgcolor_band(bgcolor=(255, 255, 255), orientation=vertical, bandwidth=10, x1=0, y1=19480, diff_threshold=0.050000, is_fuzzy=True)
 cutting point= (0, 19589)
 crop: x0=0, y0=18462, width=650, y1=19589
 save: vertical2.17.jpg
 
-i=17, numUnits=25
+i=17, num_units=25
 (x0, y0)= (0, 19589)
 (x1, y1)= (0, 20607)
-findBgcolorBand(bgcolor=(255, 255, 255), orientation=vertical, bandWidth=10, x1=0, y1=20607, diffThreshold=0.050000, isFuzzy=True)
+find_bgcolor_band(bgcolor=(255, 255, 255), orientation=vertical, bandwidth=10, x1=0, y1=20607, diff_threshold=0.050000, is_fuzzy=True)
 cutting point= (0, 20612)
 crop: x0=0, y0=19589, width=650, y1=20612
 save: vertical2.18.jpg
 
-i=18, numUnits=25
+i=18, num_units=25
 (x0, y0)= (0, 20612)
 (x1, y1)= (0, 21630)
-findBgcolorBand(bgcolor=(255, 255, 255), orientation=vertical, bandWidth=10, x1=0, y1=21630, diffThreshold=0.050000, isFuzzy=True)
+find_bgcolor_band(bgcolor=(255, 255, 255), orientation=vertical, bandwidth=10, x1=0, y1=21630, diff_threshold=0.050000, is_fuzzy=True)
 cutting point= (0, 21987)
 crop: x0=0, y0=20612, width=650, y1=21987
 save: vertical2.19.jpg
 
-i=19, numUnits=25
+i=19, num_units=25
 (x0, y0)= (0, 21987)
 (x1, y1)= (0, 23005)
-findBgcolorBand(bgcolor=(255, 255, 255), orientation=vertical, bandWidth=10, x1=0, y1=23005, diffThreshold=0.050000, isFuzzy=True)
+find_bgcolor_band(bgcolor=(255, 255, 255), orientation=vertical, bandwidth=10, x1=0, y1=23005, diff_threshold=0.050000, is_fuzzy=True)
 cutting point= (0, 23353)
 crop: x0=0, y0=21987, width=650, y1=23353
 save: vertical2.20.jpg
 
-i=20, numUnits=25
+i=20, num_units=25
 (x0, y0)= (0, 23353)
 (x1, y1)= (0, 24371)
-findBgcolorBand(bgcolor=(255, 255, 255), orientation=vertical, bandWidth=10, x1=0, y1=24371, diffThreshold=0.050000, isFuzzy=True)
+find_bgcolor_band(bgcolor=(255, 255, 255), orientation=vertical, bandwidth=10, x1=0, y1=24371, diff_threshold=0.050000, is_fuzzy=True)
 cutting point= (0, 24539)
 crop: x0=0, y0=23353, width=650, y1=24539
 save: vertical2.21.jpg
 
-i=21, numUnits=25
+i=21, num_units=25
 (x0, y0)= (0, 24539)
 (x1, y1)= (0, 25557)
-findBgcolorBand(bgcolor=(255, 255, 255), orientation=vertical, bandWidth=10, x1=0, y1=25557, diffThreshold=0.050000, isFuzzy=True)
+find_bgcolor_band(bgcolor=(255, 255, 255), orientation=vertical, bandwidth=10, x1=0, y1=25557, diff_threshold=0.050000, is_fuzzy=True)
 cutting point= (0, 25693)
 crop: x0=0, y0=24539, width=650, y1=25693
 save: vertical2.22.jpg
 
-i=22, numUnits=25
+i=22, num_units=25
 (x0, y0)= (0, 25693)
 (x1, y1)= (0, 26711)
 last cutting point= (650, 25700)
-checkProportion(unitWidth/2.0=509.000000, width=0.000000, height=7.000000, width/height=0.000000, height/width=0.000000)
+check_proportion(unit_width/2.0=509.000000, width=0.000000, height=7.000000, width/height=0.000000, height/width=0.000000)
 too thin slice - merge with previous
 crop: x0=0, y0=24539, width=650, height=25700
 save: vertical2.22.jpg
