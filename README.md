@@ -1,7 +1,7 @@
 CartoonSplit
 ============
 
-A utility set which splits the cartoon strip into multiple pieces.  
+A utility set which splits a cartoon strip into multiple pieces.  
 This utility is a python script made by using PIL (Python Image Library).  
 
 Requirements
