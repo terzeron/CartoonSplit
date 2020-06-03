@@ -354,7 +354,7 @@ def main():
         is_too_thin = check_proportion(x1 - x0, y1 - y0, unit_width, orientation)
         if is_too_thin:
             print("too thin slice - merge with previous")
-            sub_img_name = name_prefix + "." + str(i) + ext
+            sub_img_name = name_prefix + "." + str(i + 1) + ext
             (x0, y0) = (prev_x0, prev_y0)
 
         print("crop: x0=%d, y0=%d, width=%d, height=%d" % (x0, y0, width, height))
