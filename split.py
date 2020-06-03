@@ -334,6 +334,7 @@ def main():
 
             try:
                 subIm.save(sub_img_name, quality=default_quality)
+                last_saved_sub_img_name = sub_img_name
                 print("save: " + sub_img_name)
             except SystemError:
                 sys.stderr.write("Error: can't save the split image\n")
@@ -354,7 +355,7 @@ def main():
         is_too_thin = check_proportion(x1 - x0, y1 - y0, unit_width, orientation)
         if is_too_thin:
             print("too thin slice - merge with previous")
-            sub_img_name = name_prefix + "." + str(i + 1) + ext
+            sub_img_name = last_saved_sub_img_name
             (x0, y0) = (prev_x0, prev_y0)
 
         print("crop: x0=%d, y0=%d, width=%d, height=%d" % (x0, y0, width, height))
