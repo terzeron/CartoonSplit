@@ -10,30 +10,31 @@ def print_usage():
 	
 			
 def main():
-	count = len(sys.argv[2:])
-	im = []
-	total_width = 0
-	total_height = 0
-	for i in range(count):
-		print(sys.argv[i + 2])
-		im.append(Image.open(sys.argv[i + 2]))
-		(width, height) = im[i].size
-		print("%d %d" % (width, height))
-		if total_width < width:
-			total_width = width
-		total_height += height
+    count = len(sys.argv[2:])
+    im = []
+    total_width = 0
+    total_height = 0
+    for i in range(count):
+        print(sys.argv[i + 2])
+        i = Image.open(sys.argv[i + 2])
+        width, height = i.size
+        im.append(i)
+        print("%d %d %s" % (width, height, i.format))
+        if total_width < width:
+            total_width = width
+        total_height += height
 
-	print("%d %d" % (total_width, total_height))
-	new_im = Image.new("RGB", (total_width, total_height), "white");
-	box = (0, 0)
-	total_height = 0
-	for a_im in im:
-		new_im.paste(a_im, box)
-		(width, height) = a_im.size
-		total_height += height
-		box = (0, total_height)
-		print("box=", box)
-	new_im.save(sys.argv[1], quality=95)
+    print("%d %d" % (total_width, total_height))
+    new_im = Image.new("RGB", (total_width, total_height), "white");
+    box = (0, 0)
+    total_height = 0
+    for a_im in im:
+        new_im.paste(a_im, box)
+        width, height = a_im.size
+        total_height += height
+        box = (0, total_height)
+        print("box=", box)
+    new_im.save(sys.argv[1], quality=95, format=i.format)
 
         
 if __name__ == "__main__":

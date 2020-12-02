@@ -3,6 +3,7 @@ num_units= 2
 margin= 0
 diff_threshold= 0.05
 arg= vertical5.jpg
+format=JPEG
 width=687, height=533
 orientation= horizontal
 unit_width= 338

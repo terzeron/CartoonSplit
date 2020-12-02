@@ -11,7 +11,7 @@ def print_usage():
 			
 def main():
 	im = Image.open(sys.argv[1])
-	print("%d %d" % (im.size[0], im.size[1]))
+	print("%d %d %s" % (im.size[0], im.size[1], im.format))
 
         
 if __name__ == "__main__":

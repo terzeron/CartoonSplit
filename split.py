@@ -276,6 +276,8 @@ def main():
     im = Image.open(imageFile)
     if im.mode != "RGB":
         im = im.convert("RGB")
+    format = im.format
+    print("format=%s" % format)
     (width, height) = im.size
     print("width=%d, height=%d" % (width, height))
     if width > height or do_split_vertically:
@@ -333,7 +335,7 @@ def main():
                 subIm = im.crop((x0, y0, width, y1))
 
             try:
-                subIm.save(sub_img_name, quality=default_quality)
+                subIm.save(sub_img_name, quality=default_quality, format=format)
                 last_saved_sub_img_name = sub_img_name
                 print("save: " + sub_img_name)
             except SystemError:
@@ -361,7 +363,7 @@ def main():
         print("crop: x0=%d, y0=%d, width=%d, height=%d" % (x0, y0, width, height))
         subIm = im.crop((x0, y0, width, height))
         try:
-            subIm.save(sub_img_name, quality=default_quality)
+            subIm.save(sub_img_name, quality=default_quality, format=format)
             print("save: " + sub_img_name)
         except SystemError:
             sys.stderr.write("Error: can't save the split image\n")

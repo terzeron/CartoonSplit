@@ -3,6 +3,7 @@ num_units= 2
 margin= 0
 diff_threshold= 1.0
 arg= horizontal3.jpg
+format=JPEG
 width=1419, height=1087
 orientation= horizontal
 unit_width= 709

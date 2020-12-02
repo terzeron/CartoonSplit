@@ -3,6 +3,7 @@ num_units= 25
 margin= 0
 diff_threshold= 0.05
 arg= vertical4.jpg
+format=JPEG
 width=690, height=44859
 orientation= vertical
 unit_width= 1775
@@ -12,16 +13,16 @@ i=0, num_units=25
 (x0, y0)= (0, 0)
 (x1, y1)= (0, 1795)
 find_bgcolor_band(bgcolor=(0, 0, 0), orientation=vertical, bandwidth=20, x1=0, y1=1795, diff_threshold=0.050000, is_fuzzy=True)
-cutting point= (0, 1924)
-crop: x0=0, y0=0, width=690, y1=1924
+cutting point= (0, 1922)
+crop: x0=0, y0=0, width=690, y1=1922
 save: vertical4.1.jpg
 
 i=1, num_units=25
-(x0, y0)= (0, 1924)
-(x1, y1)= (0, 3699)
-find_bgcolor_band(bgcolor=(0, 0, 0), orientation=vertical, bandwidth=20, x1=0, y1=3699, diff_threshold=0.050000, is_fuzzy=True)
+(x0, y0)= (0, 1922)
+(x1, y1)= (0, 3697)
+find_bgcolor_band(bgcolor=(0, 0, 0), orientation=vertical, bandwidth=20, x1=0, y1=3697, diff_threshold=0.050000, is_fuzzy=True)
 cutting point= (0, 3795)
-crop: x0=0, y0=1924, width=690, y1=3795
+crop: x0=0, y0=1922, width=690, y1=3795
 save: vertical4.2.jpg
 
 i=2, num_units=25
