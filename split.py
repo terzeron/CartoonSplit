@@ -274,10 +274,10 @@ def main():
     print("arg=", args[0])
 
     im = Image.open(imageFile)
-    if im.mode != "RGB":
-        im = im.convert("RGB")
     format = im.format
     print("format=%s" % format)
+    if im.mode != "RGB":
+        im = im.convert("RGB")
     (width, height) = im.size
     print("width=%d, height=%d" % (width, height))
     if width > height or do_split_vertically:
