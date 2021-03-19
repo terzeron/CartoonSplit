@@ -1,51 +1,61 @@
 #!/bin/bash
 
-../split.py -n 5 vertical.jpg > temp.result
-diff temp.result n5.v.result > /dev/null 2>&1 || (echo "n5.v failure"; exit -1)
-../split.py -n 4 vertical.jpg > temp.result
-diff temp.result n4.v.result > /dev/null 2>&1 || (echo "n4.v failure"; exit -1)
-../split.py -n 3 vertical.jpg > temp.result
-diff temp.result n3.v.result > /dev/null 2>&1 || (echo "n3.v failure"; exit -1)
-../split.py -n 2 vertical.jpg > temp.result
-diff temp.result n2.v.result > /dev/null 2>&1 || (echo "n2.v failure"; exit -1)
 
-../split.py -n 5 horizontal.jpg > temp.result
-diff temp.result n5.h.result > /dev/null 2>&1 || (echo "n5.h failure"; exit -1)
-../split.py -n 4 horizontal.jpg > temp.result
-diff temp.result n4.h.result > /dev/null 2>&1 || (echo "n4.h failure"; exit -1)
-../split.py -n 3 horizontal.jpg > temp.result
-diff temp.result n3.h.result > /dev/null 2>&1 || (echo "n3.h failure"; exit -1)
-../split.py -n 2 horizontal.jpg > temp.result
-diff temp.result n2.h.result > /dev/null 2>&1 || (echo "n2.h failure"; exit -1)
+function clean_temp_files {
+    rm -f temp.result vertical*.*.jpg horizontal*.*.jpg
+}
 
-../split.py -n 25 -b 10 -c blackorwhite vertical2.jpg > temp.result
-diff temp.result n25.v2bw.result > /dev/null 2>&1 || (echo "n25.v2bw failure"; exit -1)
+function run_test {
+    test_case_name=""
+    for arg in "$@"; do
+        new_arg=$(printf "%s" "$arg" | sed -e 's/^\-//')
+        new_arg=$(printf "%s" "$new_arg" | sed -e 's/\.jpg$//')
+        if [[ $test_case_name == "" ]]; then
+            test_case_name="$new_arg"
+        else
+            test_case_name="${test_case_name}_${new_arg}"
+        fi
+    done
 
-../split.py -n 10 -c dominant vertical.jpg > temp.result
-diff temp.result n10.vd.result > /dev/null 2>&1 || (echo "n10.vd failure"; exit -1)
+    ../split.py "$@" > ${test_case_name}.result
+    diff ${test_case_name}.expected ${test_case_name}.result > /dev/null 2>&1
+    if [[ $? != 0 ]]; then
+        echo "failure in $test_case_name"
+        echo "diff ${test_case_name}.expected ${test_case_name}.result"
+        clean_temp_files
+        exit -1
+    fi
+}
 
-../split.py -n 10 -c fuzzy vertical.jpg > temp.result
-diff temp.result n10.vf.result > /dev/null 2>&1 || (echo "n10.vf failure"; exit -1)
+run_test -n 5 vertical.jpg
+run_test -n 4 vertical.jpg
+run_test -n 3 vertical.jpg
+run_test -n 2 vertical.jpg
+run_test -n 10 -c dominant vertical.jpg
+run_test -n 10 -c fuzzy vertical.jpg
 
-../split.py -n 25 -b 10 -c fuzzy vertical2.jpg > temp.result
-diff temp.result n25.v2f.result > /dev/null 2>&1 || (echo "n25.v2f failure"; exit -1)
+run_test -n 25 -b 10 -c blackorwhite vertical2.jpg
+run_test -n 25 -b 10 -c fuzzy vertical2.jpg
 
-../split.py -n 25 -c fuzzy vertical3.jpg > temp.result
-diff temp.result n25.v3f.result > /dev/null 2>&1 || (echo "n25.v3f failure"; exit -1)
+run_test -n 25 -c fuzzy vertical3.jpg
 
-../split.py -n 25 -c fuzzy vertical4.jpg > temp.result
-diff temp.result n25.v4f.result > /dev/null 2>&1 || (echo "n25.v4f failure"; exit -1)
+run_test -n 25 -c fuzzy vertical4.jpg
 
 # 첫번째 슬라이스가 너무 얇아서 쪼개지지 않는 케이스
-../split.py -n 2 -b 10 vertical5.jpg > temp.result
-diff temp.result n2.v5.result > /dev/null 2>&1 || (echo "n2.v5bw failure"; exit -1)
+run_test -n 2 -b 10 vertical5.jpg
+
+run_test -n 3 -b 10 vertical6.jpg
+
+run_test -n 5 horizontal.jpg
+run_test -n 4 horizontal.jpg
+run_test -n 3 horizontal.jpg
+run_test -n 2 horizontal.jpg
+
+run_test -n 3 horizontal2.jpg
 
 # 마지막 슬라이스가 너무 얇아서 이전 이미지에 붙여서 같은 이름으로 다시 저장해야 하는 케이스
-../split.py -n 2 -b 0 -t 1.0 -v -c blackorwhite horizontal3.jpg > temp.result
-diff temp.result n2.h3.result > /dev/null 2>&1 || (echo "n2.h3bw failure"; exit -1)
+run_test -n 2 -b 0 -t 1.0 -v -c blackorwhite horizontal3.jpg
 
-../split.py -n 3 -b 10 vertical6.jpg > temp.result
-diff temp.result n3.v6.result > /dev/null 2>&1 || (echo "n3.v2bw failure"; exit -1)
+clean_temp_files
 
-echo "success"
-rm -f temp.result vertical*.*.jpg horizontal*.*.jpg
+echo success
