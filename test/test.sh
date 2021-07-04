@@ -18,10 +18,10 @@ function run_test {
     done
 
     ../split.py "$@" > ${test_case_name}.result
-    diff ${test_case_name}.expected ${test_case_name}.result > /dev/null 2>&1
+    diff ${test_case_name}.result ${test_case_name}.expected > /dev/null 2>&1
     if [[ $? != 0 ]]; then
         echo "failure in $test_case_name"
-        echo "diff ${test_case_name}.expected ${test_case_name}.result"
+        echo "diff ${test_case_name}.result ${test_case_name}.expected"
         clean_temp_files
         exit -1
     fi
