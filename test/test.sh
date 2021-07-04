@@ -56,6 +56,16 @@ run_test -n 3 horizontal2.jpg
 # 마지막 슬라이스가 너무 얇아서 이전 이미지에 붙여서 같은 이름으로 다시 저장해야 하는 케이스
 run_test -n 2 -b 0 -t 1.0 -v -c blackorwhite horizontal3.jpg
 
+# 느슨한 범위 탐색
+run_test -n 2 horizontal4.jpg
+run_test -n 2 -w horizontal4.jpg
+
+# 느슨한 컬러값 비교
+run_test -n 2 -a 4 horizontal4.jpg
+
+# 배경색 퍼지, 느슨한 컬러값 비교, 느슨한 범위 탐색
+run_test -n 2 -c fuzzy -a 6 -w horizontal4.jpg
+
 clean_temp_files
 
 echo success

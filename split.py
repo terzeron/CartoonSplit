@@ -15,6 +15,7 @@ default_num_units = 1 # 1/n로 자를 때의 n의 갯수
 default_margin = 0 # 이미지 가장자리 제외하는 여유공간의 크기
 default_diff_threshold = 0.05 # 5%
 default_size_threshold = 0 # 0 pixel
+default_acceptable_diff_of_color_value = 1
 default_quality = 90
 
 
@@ -76,7 +77,7 @@ def get_color_distance(color_a, color_b, is_fuzzy) -> float:
     return distance
 
 
-def check_horizontal_band(im, x1, y1, bandwidth, bgcolor, margin, diff_threshold, is_fuzzy) -> Tuple[bool, int]:
+def check_horizontal_band(im, x1, y1, bandwidth, bgcolor, margin, diff_threshold, acceptable_diff_of_color_value, is_fuzzy) -> Tuple[bool, int]:
     #print "check_horizontal_band(%d, %d)" % (x1, y1)
     (width, height) = im.size
     for j in range(y1, y1 + bandwidth):
@@ -100,7 +101,8 @@ def check_horizontal_band(im, x1, y1, bandwidth, bgcolor, margin, diff_threshold
                 else:
                     is_same = False
             if not is_same:
-                if get_color_distance(pixel, bgcolor, is_fuzzy) > 3.0:
+                distance = get_color_distance(pixel, bgcolor, is_fuzzy)
+                if distance > 3 * pow(acceptable_diff_of_color_value, 2):
                     diff_count += 1
                     #print "y1=%d, diff_count=%d, converted_threshold=%f" % (y1, diff_count, (width - 2 * margin) * diff_threshold)
                     # threshold 미만으로 불일치가 존재하면 false 반환
@@ -109,7 +111,7 @@ def check_horizontal_band(im, x1, y1, bandwidth, bgcolor, margin, diff_threshold
     return (True, 0)
 
 
-def check_vertical_band(im, x1, y1, bandwidth, bgcolor, margin, diff_threshold, is_fuzzy) -> Tuple[bool, int]:
+def check_vertical_band(im, x1, y1, bandwidth, bgcolor, margin, diff_threshold, acceptable_diff_of_color_value, is_fuzzy) -> Tuple[bool, int]:
     #print("check_vertical_band(%d, %d)" % (x1, y1))
     (width, height) = im.size
     for i in range(x1, x1 + bandwidth):
@@ -134,7 +136,7 @@ def check_vertical_band(im, x1, y1, bandwidth, bgcolor, margin, diff_threshold, 
                     is_same = False
             if not is_same:
                 distance = get_color_distance(pixel, bgcolor, is_fuzzy)
-                if distance > 3.0:
+                if distance > 3 * pow(acceptable_diff_of_color_value, 2):
                     diff_count += 1
                     #print("x1=%d, distance=%d, diff_count=%d, converted_threshold=%f" % (x1, distance, diff_count, (height - 2 * margin) * diff_threshold))
                     # threshold 미만으로 불일치가 존재하면 false 반환
@@ -143,7 +145,7 @@ def check_vertical_band(im, x1, y1, bandwidth, bgcolor, margin, diff_threshold, 
     return (True, 0)
 
 
-def find_bgcolor_band(im, bgcolor, orientation, bandwidth, x1, y1, margin, diff_threshold, is_fuzzy) -> Tuple[int, int]:
+def find_bgcolor_band(im, bgcolor, orientation, bandwidth, x1, y1, margin, diff_threshold, acceptable_diff_of_color_value, is_fuzzy) -> Tuple[int, int]:
     print("find_bgcolor_band(bgcolor=%s, orientation=%s, bandwidth=%d, x1=%d, y1=%d, diff_threshold=%f, is_fuzzy=%s)" % (bgcolor, orientation, bandwidth, x1, y1, diff_threshold, is_fuzzy))
     (width, height) = im.size
     if orientation == "vertical":
@@ -151,7 +153,7 @@ def find_bgcolor_band(im, bgcolor, orientation, bandwidth, x1, y1, margin, diff_
         i = 0
         while y1 + i < height:
             # 가로 띠가 배경색으로만 구성되었는지 확인
-            (flag, offset) = check_horizontal_band(im, x1, y1 + i, bandwidth, bgcolor, margin, diff_threshold, is_fuzzy)
+            (flag, offset) = check_horizontal_band(im, x1, y1 + i, bandwidth, bgcolor, margin, diff_threshold, acceptable_diff_of_color_value, is_fuzzy)
             if flag:
                 return (x1, int(y1 + i + bandwidth / 2))
             i += offset
@@ -160,7 +162,7 @@ def find_bgcolor_band(im, bgcolor, orientation, bandwidth, x1, y1, margin, diff_
         i = 0
         while x1 + i < width:
             # 세로 띠가 배경색으로만 구성되었는지 확인
-            (flag, offset) = check_vertical_band(im, x1 + i, y1, bandwidth, bgcolor, margin, diff_threshold, is_fuzzy)
+            (flag, offset) = check_vertical_band(im, x1 + i, y1, bandwidth, bgcolor, margin, diff_threshold, acceptable_diff_of_color_value, is_fuzzy)
             if flag:
                 return (int(x1 + i + bandwidth / 2), y1)
             i += offset
@@ -202,7 +204,11 @@ def check_proportion(width, height, unit_width, orientation) -> bool:
 
 
 def print_usage() -> None:
-    print("_usage: %s -n #unit [-b <bandwidth>] [-m <margin>] [-c <bgcolor or method>] [-t <diff threshold>] [-v] <image file>" % (sys.argv[0]))
+    print("usage: %s -n #unit")
+    print("          [-b <bandwidth>] [-m <margin>]")
+    print("          [-c <bgcolor or method>] [-t <diff threshold>]")
+    print("          [-s <size_threshold] [-a <acceptable diff of color value>]")
+    print("          [-v] [-w] <image file>" % (sys.argv[0]))
     print("\t-n <num units>: more than 2")
     print("\t-b <bandwidth>: (default %d)" % (default_bandwidth))
     print("\t-m <margin>: (default %d)" % (default_margin))
@@ -212,22 +218,26 @@ def print_usage() -> None:
     print("\t\tfuzzy: either black, white or prevailing color (automatic)")
     print("\t-t <diff threshold>: diff threshold (default %f)" % (default_diff_threshold))
     print("\t-s <size threshold>: size threshold (default %d)" % (default_size_threshold))
+    print("\t-a <diff of color value>: acceptable diff of color value (default %d)" % (default_acceptable_diff_of_color_value))
     print("\t-v: split vertically")
+    print("\t-w: scan range wider than fixed unit edge")
     
             
 def main() -> int:
     # 옵션 처리
-    bandwidth = default_bandwidth
-    num_units = default_num_units
-    margin = default_margin
-    diff_threshold = default_diff_threshold;
-    size_threshold = default_size_threshold;
-    bgcolor = None
-    do_use_dominant_color = False
-    is_fuzzy = False
-    do_split_vertically = False
+    bandwidth: int = default_bandwidth
+    num_units: int = default_num_units
+    margin: int = default_margin
+    diff_threshold: float = default_diff_threshold;
+    size_threshold: float = default_size_threshold;
+    acceptable_diff_of_color_value: int = default_acceptable_diff_of_color_value
+    bgcolor: Optional[Tuple[int, int, int]] = None
+    do_use_dominant_color: bool = False
+    is_fuzzy: bool = False
+    do_split_vertically: bool = False
+    do_scan_wider:bool = False
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hb:n:m:c:t:s:vi")
+        opts, args = getopt.getopt(sys.argv[1:], "hb:n:m:c:t:s:a:vwi")
     except getopt.GetoptError:
         print_usage()
         sys.stderr.write("Error: invaild option definition\n")
@@ -254,8 +264,12 @@ def main() -> int:
             diff_threshold = float(a)
         elif o == "-s":
             size_threshold = int(a)
+        elif o == "-a":
+            acceptable_diff_of_color_value = int(a)
         elif o == "-v":
             do_split_vertically = True
+        elif o == "-w":
+            do_scan_wider = True
         else:
             print_usage()
             sys.exit(-1)
@@ -269,7 +283,8 @@ def main() -> int:
     print("num_units=", num_units)
     print("margin=", margin)
     print("diff_threshold=", diff_threshold)
-    #print("size_threshold=", size_threshold)
+    print("size_threshold=", size_threshold)
+    print("acceptable_diff_of_color_value=", acceptable_diff_of_color_value)
     print("arg=", args[0])
 
     im = Image.open(imageFile)
@@ -310,14 +325,18 @@ def main() -> int:
             print("\ni=%d, num_units=%d" % (i, num_units))
             if orientation == "horizontal":
                 (x1, y1) = (int(max((unit_width + bandwidth) * (i + 1), x0 + unit_width)), y0)
+                if do_scan_wider:
+                    (x1, y1) = (int(x1 * 0.9), y1)
             else:
                 (x1, y1) = (x0, int(max((unit_width + bandwidth) * (i + 1), y0 + unit_width)))
+                if do_scan_wider:
+                    (x1, y1) = (x1, int(y1 * 0.9))
             print("(x0, y0)=", (x0, y0))
             print("(x1, y1)=", (x1, y1))
             if x0 >= width - bandwidth or y0 >= height - bandwidth or x1 >= width - bandwidth or y1 >= height - bandwidth:
                 break
             # 배경색으로만 구성된 띠를 찾아냄
-            (x1, y1) = find_bgcolor_band(im, bgcolor, orientation, bandwidth, x1, y1, margin, diff_threshold, is_fuzzy)
+            (x1, y1) = find_bgcolor_band(im, bgcolor, orientation, bandwidth, x1, y1, margin, diff_threshold, acceptable_diff_of_color_value, is_fuzzy)
             print("cutting point=", (x1, y1))
             if (x1, y1) == (-1, -1):
                 print("Warning: no splitting")

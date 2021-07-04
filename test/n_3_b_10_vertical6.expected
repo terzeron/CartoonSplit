@@ -2,6 +2,8 @@ bandwidth= 10
 num_units= 3
 margin= 0
 diff_threshold= 0.05
+size_threshold= 0
+acceptable_diff_of_color_value= 1
 arg= vertical6.jpg
 format=JPEG
 width=687, height=2259
