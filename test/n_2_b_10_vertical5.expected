@@ -7,12 +7,12 @@ format=JPEG
 width=687, height=533
 orientation= horizontal
 unit_width= 338
-bgcolor= (232, 232, 232)
+bgcolor= (237, 237, 237)
 
 i=0, num_units=2
 (x0, y0)= (0, 0)
 (x1, y1)= (348, 0)
-find_bgcolor_band(bgcolor=(232, 232, 232), orientation=horizontal, bandwidth=10, x1=348, y1=0, diff_threshold=0.050000, is_fuzzy=False)
+find_bgcolor_band(bgcolor=(237, 237, 237), orientation=horizontal, bandwidth=10, x1=348, y1=0, diff_threshold=0.050000, is_fuzzy=False)
 cutting point= (-1, -1)
 Warning: no splitting
 last cutting point= (687, 533)

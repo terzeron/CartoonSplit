@@ -26,7 +26,7 @@ def sumup_pixels_in_box(im, sum_pixel, pixel_count, x1, y1, bandwidth) -> Tuple[
             sum_pixel[1] += pixel[1]
             sum_pixel[2] += pixel[2]
             pixel_count += 1
-            return sum_pixel, pixel_count
+    return sum_pixel, pixel_count
         
 
 def determine_bgcolor(im, bandwidth) -> Tuple[int, int, int]:
