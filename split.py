@@ -203,12 +203,12 @@ def check_proportion(width, height, unit_width, orientation) -> bool:
     return False
 
 
-def print_usage() -> None:
-    print("usage: %s -n #unit")
+def print_usage(program_name: str) -> None:
+    print("usage: %s -n #unit" % program_name)
     print("          [-b <bandwidth>] [-m <margin>]")
     print("          [-c <bgcolor or method>] [-t <diff threshold>]")
     print("          [-s <size_threshold] [-a <acceptable diff of color value>]")
-    print("          [-v] [-w] <image file>" % (sys.argv[0]))
+    print("          [-v] [-w] <image file>")
     print("\t-n <num units>: more than 2")
     print("\t-b <bandwidth>: (default %d)" % (default_bandwidth))
     print("\t-m <margin>: (default %d)" % (default_margin))
@@ -239,7 +239,7 @@ def main() -> int:
     try:
         opts, args = getopt.getopt(sys.argv[1:], "hb:n:m:c:t:s:a:vwi")
     except getopt.GetoptError:
-        print_usage()
+        print_usage(sys.argv[0])
         sys.stderr.write("Error: invaild option definition\n")
         sys.exit(-1)
         
@@ -271,7 +271,7 @@ def main() -> int:
         elif o == "-w":
             do_scan_wider = True
         else:
-            print_usage()
+            print_usage(sys.argv[0])
             sys.exit(-1)
     if len(args) < 1:
         print_usage()
