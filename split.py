@@ -10,11 +10,12 @@ from math import pow
 from typing import Tuple, List, Dict, Optional
 
 
+Image.MAX_IMAGE_PIXELS = None
 default_bandwidth = 20 # 자르는 기준이 되는 띠의 두께
 default_num_units = 1 # 1/n로 자를 때의 n의 갯수
 default_margin = 0 # 이미지 가장자리 제외하는 여유공간의 크기
-default_diff_threshold = 0.05 # 5%
-default_size_threshold = 0 # 0 pixel
+default_diff_threshold = 0.05 # 5%, 띠를 구성하는 픽셀들의 불일치 허용율
+default_size_threshold = 0 # 0 pixel, 분할 대상으로 간주할 최소한의 크기
 default_acceptable_diff_of_color_value = 1
 default_quality = 90
 
