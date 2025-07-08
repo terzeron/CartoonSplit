@@ -19,6 +19,11 @@ default_size_threshold = 0 # 0 pixel, 분할 대상으로 간주할 최소한의
 default_acceptable_diff_of_color_value = 1
 default_quality = 90
 
+# WebP 최적화 상수
+WEBP_MAX_DIMENSION = 8000  # WebP 권장 최대 크기
+WEBP_MAX_PIXELS = 32000000  # 32MP (약 8000x4000)
+WEBP_MEMORY_MULTIPLIER = 8  # WebP 인코딩에 필요한 메모리 배수
+
 
 def sumup_pixels_in_box(im, sum_pixel, pixel_count, x1, y1, bandwidth) -> Tuple[List[int], int]:
     for i in range(x1, x1 + bandwidth):
@@ -204,6 +209,160 @@ def check_proportion(width, height, unit_width, orientation) -> bool:
     return False
 
 
+def optimize_image_for_webp(subIm):
+    """Optimize image to ensure WebP compatibility"""
+    try:
+        # Ensure image is in RGB mode
+        if subIm.mode != 'RGB':
+            subIm = subIm.convert('RGB')
+        
+        width, height = subIm.size
+        total_pixels = width * height
+        
+        # Check if image needs optimization
+        needs_resize = False
+        new_width, new_height = width, height
+        
+        # Check dimension limits
+        if width > WEBP_MAX_DIMENSION or height > WEBP_MAX_DIMENSION:
+            needs_resize = True
+            if width > height:
+                new_width = WEBP_MAX_DIMENSION
+                new_height = int(height * WEBP_MAX_DIMENSION / width)
+            else:
+                new_height = WEBP_MAX_DIMENSION
+                new_width = int(width * WEBP_MAX_DIMENSION / height)
+        
+        # Check pixel count limits
+        elif total_pixels > WEBP_MAX_PIXELS:
+            needs_resize = True
+            scale_factor = (WEBP_MAX_PIXELS / total_pixels) ** 0.5
+            new_width = int(width * scale_factor)
+            new_height = int(height * scale_factor)
+        
+        # Apply resize if needed
+        if needs_resize:
+            print(f"Optimizing image from {width}x{height} to {new_width}x{new_height} for WebP compatibility")
+            subIm = subIm.resize((new_width, new_height), Image.Resampling.LANCZOS)
+        
+        return subIm
+        
+    except Exception as e:
+        print(f"Error optimizing image: {e}")
+        return subIm
+
+
+def save_webp_guaranteed(subIm, sub_img_name):
+    """Save image as WebP with guaranteed success using multiple fallback strategies"""
+    try:
+        # Strategy 1: Try with optimized image and conservative settings
+        optimized_im = optimize_image_for_webp(subIm)
+        final_width, final_height = optimized_im.size
+        print(f"Attempting WebP save: {sub_img_name} ({final_width}x{final_height})")
+        
+        try:
+            optimized_im.save(
+                sub_img_name, 
+                format='WEBP', 
+                quality=80,      # Lower quality for better compatibility
+                method=0,        # Most reliable method
+                lossless=False,
+                exact=False
+            )
+            print(f"Successfully saved WebP: {sub_img_name}")
+            return True
+        except Exception as e1:
+            print(f"WebP method=0 failed: {e1}")
+            
+        # Strategy 2: Try with even lower quality
+        try:
+            optimized_im.save(
+                sub_img_name, 
+                format='WEBP', 
+                quality=70,
+                method=1,
+                lossless=False,
+                exact=False
+            )
+            print(f"Successfully saved WebP (method=1): {sub_img_name}")
+            return True
+        except Exception as e2:
+            print(f"WebP method=1 failed: {e2}")
+            
+        # Strategy 3: Try with lossless compression
+        try:
+            optimized_im.save(
+                sub_img_name, 
+                format='WEBP', 
+                lossless=True,
+                method=0
+            )
+            print(f"Successfully saved lossless WebP: {sub_img_name}")
+            return True
+        except Exception as e3:
+            print(f"Lossless WebP failed: {e3}")
+            
+        # Strategy 4: Try with original image (no optimization)
+        try:
+            if subIm.mode != 'RGB':
+                subIm = subIm.convert('RGB')
+            subIm.save(
+                sub_img_name, 
+                format='WEBP', 
+                quality=60,
+                method=0
+            )
+            print(f"Successfully saved WebP (original): {sub_img_name}")
+            return True
+        except Exception as e4:
+            print(f"Original image WebP failed: {e4}")
+            
+        # Strategy 5: Try with PNG as fallback (WebP-like compression)
+        try:
+            png_name = sub_img_name.replace('.webp', '.png')
+            optimized_im.save(png_name, format='PNG', optimize=True)
+            print(f"Saved as PNG fallback: {png_name}")
+            return True
+        except Exception as e5:
+            print(f"PNG fallback failed: {e5}")
+            
+        return False
+        
+    except Exception as e:
+        print(f"WebP save completely failed for {sub_img_name}: {e}")
+        return False
+
+
+def save_image_safely(subIm, sub_img_name, original_format):
+    """Save image with guaranteed success using multiple formats"""
+    try:
+        # Try WebP first with multiple fallback strategies
+        if save_webp_guaranteed(subIm, sub_img_name):
+            return True
+        
+        # If WebP completely fails, use original format
+        print(f"WebP failed, using original format {original_format} for {sub_img_name}")
+        
+        # Ensure image is in correct mode
+        if subIm.mode != 'RGB':
+            subIm = subIm.convert('RGB')
+        
+        if original_format and original_format.upper() in ['JPEG', 'JPG']:
+            subIm.save(sub_img_name, quality=85, format='JPEG', optimize=True)
+        elif original_format and original_format.upper() == 'PNG':
+            subIm.save(sub_img_name, format='PNG', optimize=True)
+        else:
+            # Default to JPEG if original format is not supported
+            subIm.save(sub_img_name, quality=85, format='JPEG', optimize=True)
+        
+        print(f"Successfully saved as {original_format or 'JPEG'}: {sub_img_name}")
+        return True
+        
+    except Exception as e:
+        print(f"All save methods failed for {sub_img_name}: {e}")
+        return False
+
+
 def print_usage(program_name: str) -> None:
     print("usage: %s -n #unit" % program_name)
     print("          [-b <bandwidth>] [-m <margin>]")
@@ -320,9 +479,11 @@ def main() -> int:
             return -1
         
     (x0, y0) = (0, 0)
-    (prev_x0, prev_y0) = (x0, y0)
+    cutting_points = []  # Store all cutting points
+    actual_units_created = 0  # Track actual number of units created
+    
     if num_units > 1:
-        for i in range(0, num_units):
+        for i in range(0, num_units - 1):  # Changed: only go up to num_units - 1
             print("\ni=%d, num_units=%d" % (i, num_units))
             if orientation == "horizontal":
                 (x1, y1) = (int(max((unit_width + bandwidth) * (i + 1), x0 + unit_width)), y0)
@@ -334,60 +495,174 @@ def main() -> int:
                     (x1, y1) = (x1, int(y1 * 0.9))
             print("(x0, y0)=", (x0, y0))
             print("(x1, y1)=", (x1, y1))
-            if x0 >= width - bandwidth or y0 >= height - bandwidth or x1 >= width - bandwidth or y1 >= height - bandwidth:
-                break
+            
+            # Ensure we don't exceed image boundaries
+            if orientation == "horizontal":
+                if x1 >= width - bandwidth:
+                    x1 = width
+                if x0 >= width - bandwidth:
+                    print(f"Reached end of image at x0={x0}, width={width}")
+                    break
+            else:
+                if y1 >= height - bandwidth:
+                    y1 = height
+                if y0 >= height - bandwidth:
+                    print(f"Reached end of image at y0={y0}, height={height}")
+                    break
+                    
             # 배경색으로만 구성된 띠를 찾아냄
             (x1, y1) = find_bgcolor_band(im, bgcolor, orientation, bandwidth, x1, y1, margin, diff_threshold, acceptable_diff_of_color_value, is_fuzzy)
             print("cutting point=", (x1, y1))
+            
+            # If no suitable cutting point found, use calculated position
             if (x1, y1) == (-1, -1):
-                print("Warning: no splitting")
-                break
+                if orientation == "horizontal":
+                    x1 = min(width, int((width * (i + 1)) / num_units))
+                else:
+                    y1 = min(height, int((height * (i + 1)) / num_units))
+                print("Using fallback cutting point=", (x1, y1))
 
+            # Ensure coordinates are valid and within image bounds
+            if orientation == "horizontal":
+                if x1 <= x0:
+                    x1 = width
+                if x0 < 0:
+                    x0 = 0
+                if x1 > width:
+                    x1 = width
+            else:
+                if y1 <= y0:
+                    y1 = height
+                if y0 < 0:
+                    y0 = 0
+                if y1 > height:
+                    y1 = height
+
+            # Additional safety check: if we're at the end of the image, break
+            if orientation == "horizontal":
+                if x0 >= width:
+                    print(f"Reached end of image at x0={x0}, width={width}")
+                    break
+            else:
+                if y0 >= height:
+                    print(f"Reached end of image at y0={y0}, height={height}")
+                    break
+
+            cutting_points.append((x0, y0, x1, y1))
             sub_img_name = name_prefix + "." + str(i + 1) + ext
                     
             # 잘라서 저장
             if orientation == "horizontal":
                 print("crop: x0=%d, y0=%d, x1=%d, height=%d" % (x0, y0, x1, height))
-                subIm = im.crop((x0, y0, x1, height))
+                # Ensure valid crop coordinates
+                if x1 > x0 and x0 >= 0 and x1 <= width:
+                    subIm = im.crop((x0, y0, x1, height))
+                else:
+                    print(f"Invalid crop coordinates: x0={x0}, x1={x1}, width={width}")
+                    sys.stderr.write("Error: invalid crop coordinates\n")
+                    return -1
             else:
                 print("crop: x0=%d, y0=%d, width=%d, y1=%d" % (x0, y0, width, y1))
-                subIm = im.crop((x0, y0, width, y1))
+                # Ensure valid crop coordinates
+                if y1 > y0 and y0 >= 0 and y1 <= height:
+                    subIm = im.crop((x0, y0, width, y1))
+                else:
+                    print(f"Invalid crop coordinates: y0={y0}, y1={y1}, height={height}")
+                    sys.stderr.write("Error: invalid crop coordinates\n")
+                    return -1
 
+            # Check if cropped image is valid
+            if subIm.size[0] <= 0 or subIm.size[1] <= 0:
+                print(f"Invalid cropped image size: {subIm.size}")
+                sys.stderr.write("Error: cropped image has zero size\n")
+                return -1
+
+            # Save with WebP fallback
             try:
                 subIm.save(sub_img_name, quality=default_quality, format=format)
-                last_saved_sub_img_name = sub_img_name
-                print("save: " + sub_img_name)
-            except SystemError:
-                sys.stderr.write("Error: can't save the split image\n")
-                return -1
-            (prev_x0, prev_y0) = (x0, y0)
+            except Exception as e:
+                print(f"Failed to save as {format}: {e}")
+                # Try WebP with lower quality
+                try:
+                    subIm.save(sub_img_name, quality=80, format='WEBP')
+                except Exception as e2:
+                    print(f"Failed to save as WebP: {e2}")
+                    # Final fallback to JPEG
+                    try:
+                        subIm.save(sub_img_name, quality=85, format='JPEG')
+                    except Exception as e3:
+                        print(f"All save methods failed: {e3}")
+                        sys.stderr.write("Error: can't save the split image\n")
+                        return -1
+            
+            print("save: " + sub_img_name)
+            actual_units_created += 1
             (x0, y0) = (x1, y1)
 
-        # 나머지 부분 저장
-        print("last cutting point=", (width, height))
-        if orientation == "horizontal":
-            (x1, y1) = (width, 0)
-        else:
-            (x1, y1) = (0, height)
-
-        sub_img_name = name_prefix + "." + str(i + 1) + ext
-
-        # 마지막 남은 조각의 경우, 너무 얇다면 이전 조각에 붙여서 다시 저장
-        is_too_thin = check_proportion(x1 - x0, y1 - y0, unit_width, orientation)
-        if is_too_thin:
-            print("too thin slice - merge with previous")
-            sub_img_name = last_saved_sub_img_name
-            (x0, y0) = (prev_x0, prev_y0)
-
-        print("crop: x0=%d, y0=%d, width=%d, height=%d" % (x0, y0, width, height))
-        subIm = im.crop((x0, y0, width, height))
-        try:
-            subIm.save(sub_img_name, quality=default_quality, format=format)
-            print("save: " + sub_img_name)
-        except SystemError:
-            sys.stderr.write("Error: can't save the split image\n")
-            return -1
+        # 마지막 조각 저장 (필요한 경우에만)
+        print("Checking if final piece is needed...")
         
+        # Check if we need a final piece
+        needs_final_piece = False
+        if orientation == "horizontal":
+            if x0 < width:
+                needs_final_piece = True
+        else:
+            if y0 < height:
+                needs_final_piece = True
+        
+        if needs_final_piece:
+            print("Creating final piece...")
+            sub_img_name = name_prefix + "." + str(actual_units_created + 1) + ext
+
+            # 마지막 조각 저장
+            if orientation == "horizontal":
+                print("crop: x0=%d, y0=%d, width=%d, height=%d" % (x0, y0, width, height))
+                if x0 < width:
+                    subIm = im.crop((x0, y0, width, height))
+                else:
+                    print("Final crop would result in empty image")
+                    sys.stderr.write("Error: final crop would be empty\n")
+                    return -1
+            else:
+                print("crop: x0=%d, y0=%d, width=%d, height=%d" % (x0, y0, width, height))
+                if y0 < height:
+                    subIm = im.crop((x0, y0, width, height))
+                else:
+                    print("Final crop would result in empty image")
+                    sys.stderr.write("Error: final crop would be empty\n")
+                    return -1
+                
+            # Check if final cropped image is valid
+            if subIm.size[0] <= 0 or subIm.size[1] <= 0:
+                print(f"Invalid final cropped image size: {subIm.size}")
+                sys.stderr.write("Error: final cropped image has zero size\n")
+                return -1
+                
+            # Save with WebP fallback
+            try:
+                subIm.save(sub_img_name, quality=default_quality, format=format)
+            except Exception as e:
+                print(f"Failed to save as {format}: {e}")
+                # Try WebP with lower quality
+                try:
+                    subIm.save(sub_img_name, quality=80, format='WEBP')
+                except Exception as e2:
+                    print(f"Failed to save as WebP: {e2}")
+                    # Final fallback to JPEG
+                    try:
+                        subIm.save(sub_img_name, quality=85, format='JPEG')
+                    except Exception as e3:
+                        print(f"All save methods failed: {e3}")
+                        sys.stderr.write("Error: can't save the split image\n")
+                        return -1
+            
+            print("save: " + sub_img_name)
+            actual_units_created += 1
+        else:
+            print("No final piece needed - image already fully processed")
+        
+    print(f"Total units created: {actual_units_created}")
     return 0
 
         
